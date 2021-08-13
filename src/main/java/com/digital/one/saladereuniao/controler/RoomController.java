@@ -4,6 +4,7 @@ import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,10 +44,10 @@ public class RoomController {
         return ResponseEntity.ok(roomService.save(room));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/rooms/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id){
         roomService.deleteById(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(String.format("Room %d deleted", id));
     }
 
     private Room findRoom(Long id) throws ResourceNotFoundException {
