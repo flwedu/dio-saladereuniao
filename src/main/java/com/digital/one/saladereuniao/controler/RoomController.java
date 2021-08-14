@@ -6,9 +6,9 @@ import com.digital.one.saladereuniao.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,12 +31,12 @@ public class RoomController {
     }
 
     @PostMapping("/rooms")
-    public ResponseEntity<Room> createRoom(@Validated @RequestBody Room newRoom){
+    public ResponseEntity<Room> createRoom(@Valid @RequestBody Room newRoom){
         return ResponseEntity.ok(roomService.save(newRoom));
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @Validated @RequestBody Room newRoomData) throws ResourceNotFoundException {
+    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @Valid @RequestBody Room newRoomData) throws ResourceNotFoundException {
         Room room = findRoom(id);
         room.setName(newRoomData.getName());
         room.setDate(newRoomData.getDate());
