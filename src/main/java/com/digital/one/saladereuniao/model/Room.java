@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "meetingroms")
+@Table(name = "meetingrooms")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class Room {
     private Long id;
 
     private String name;
+
+    @NotNull
     private String date;
     private String startHour;
     private String endHour;
