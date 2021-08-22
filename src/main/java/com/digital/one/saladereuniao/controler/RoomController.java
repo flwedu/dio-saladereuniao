@@ -50,6 +50,7 @@ public class RoomController {
         Room room = findRoom(id);
         room.setName(newRoomData.getName());
         room.setDate(newRoomData.getDate());
+        room.setStartHour(newRoomData.getStartHour());
         room.setEndHour(newRoomData.getEndHour());
         return ResponseEntity.ok(roomService.save(room));
     }
