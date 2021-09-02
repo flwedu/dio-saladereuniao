@@ -35,7 +35,15 @@ Foi criado com o intuito de demonstrar o desenvolvimento de uma aplicação para
 
 Para rodar essa API, basta acessar a pasta raiz da aplicação via terminar e executar `gradle bootRun`.
 
-A API Rest irá rodar em `http://localhost:8080/api/v1`. Os dados serão persistidos em memória, através da H2 Database Engine.
+A API Rest irá rodar em `http://localhost:8080/api/v1`. Os dados serão persistidos em memória, através da
+H2 Database Engine.
+
+A aplicação possui um arquivo com um código SQL de inicialização e população da database localizado 
+em `src/main/resources/data.sql`.
+
+Qualquer problema ao iniciar tal base de dados, inicialize um banco de dados vazio, apagando a linha 
+`spring.jpa.hibernate.ddl-auto=none` do arquivo `src/main/resources/application.properties`. Dessa forma, o próprio Spring
+se encarregará da inicialização.
 
 ## Requisições aceitas
 
