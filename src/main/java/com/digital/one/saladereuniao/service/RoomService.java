@@ -11,8 +11,12 @@ import java.util.Optional;
 @Service
 public class RoomService {
 
+    private final RoomRepository roomRepository;
+
     @Autowired
-    private RoomRepository roomRepository;
+    public RoomService(RoomRepository roomRepository){
+        this.roomRepository = roomRepository;
+    }
 
     public List<Room> findAll() {
         return roomRepository.findAll();
