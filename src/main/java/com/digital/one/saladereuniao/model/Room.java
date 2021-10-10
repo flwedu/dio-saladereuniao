@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Room {
 
     @Id
@@ -41,7 +43,8 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" + "id=" + id + ", name='" + name + '\'' + ", date='" + date + '\'' + ", startHour='" + startHour
-                + '\'' + ", endHour='" + endHour + '\'' + '}';
+	return "Room{" + "id=" + id + ", name='" + name + '\'' + ", date='" + date + '\'' + ", startHour='" + startHour
+		+ '\'' + ", endHour='" + endHour + '\'' + '}';
     }
+
 }
