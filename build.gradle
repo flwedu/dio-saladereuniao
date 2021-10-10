@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.digital.one'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = 11
 
 configurations {
 	compileOnly {
@@ -30,6 +30,7 @@ dependencies {
 	testImplementation(platform('org.junit:junit-bom:5.8.1'))
 	testImplementation('org.junit.jupiter:junit-jupiter:5.8.1')
 }
+
 
 test {
 	useJUnitPlatform()
