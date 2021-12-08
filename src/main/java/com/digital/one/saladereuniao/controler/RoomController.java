@@ -24,7 +24,6 @@ import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("api/v1/rooms")
 public class RoomController {
 
