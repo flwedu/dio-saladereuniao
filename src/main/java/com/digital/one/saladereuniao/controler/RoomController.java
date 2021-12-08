@@ -1,6 +1,7 @@
 package com.digital.one.saladereuniao.controler;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digital.one.saladereuniao.DTO.RoomDTO;
+import com.digital.one.saladereuniao.DTO.RoomMapper;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -27,41 +30,43 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    private RoomMapper mapper;
 
     @GetMapping()
-    public ResponseEntity<List<Room>> getAllRooms() {
-	return ResponseEntity.ok(roomService.findAll());
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.findAll().stream().map(mapper::toDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
-	Room room = findRoom(id);
-	return ResponseEntity.ok(room);
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
+        Room room = findRoom(id);
+        return ResponseEntity.ok(mapper.toDTO(room));
     }
 
     @PostMapping()
-    public ResponseEntity<Room> createRoom(@Valid @RequestBody Room newRoom) {
-	return ResponseEntity.ok(roomService.save(newRoom));
+    public ResponseEntity<RoomDTO> createRoom(@Valid @RequestBody RoomDTO room) {
+        Room roomToSave = mapper.toEntity(room);
+        RoomDTO savedRoom = mapper.toDTO(roomService.save(roomToSave));
+        return ResponseEntity.ok(savedRoom);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @Valid @RequestBody Room newRoomData)
-	    throws ResourceNotFoundException {
-	Room room = findRoom(id);
-	room.setName(newRoomData.getName());
-	room.setReservationDate(newRoomData.getReservationDate());
-	room.setStartHour(newRoomData.getStartHour());
-	room.setEndHour(newRoomData.getEndHour());
-	return ResponseEntity.ok(roomService.save(room));
+    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO newRoomData)
+            throws ResourceNotFoundException {
+        findRoom(id);
+        Room room = mapper.toEntity(newRoomData);
+        room.setId(id);
+        return ResponseEntity.ok(mapper.toDTO(roomService.save(room)));
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) {
-	roomService.deleteById(id);
-	return ResponseEntity.ok().build();
+        roomService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     private Room findRoom(Long id) throws ResourceNotFoundException {
-	return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
+        return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
     }
 }
