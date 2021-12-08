@@ -5,9 +5,10 @@ import java.time.LocalTime;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import org.hibernate.validator.constraints.Length;
+
+import com.digital.one.saladereuniao.model.Room;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +38,15 @@ public class RoomDTO {
     @NotNull
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endHour;
+
+    public Room toEntity() {
+	Room room = new Room();
+	room.setId(id);
+	room.setName(name);
+	room.setReservationDate(reservationDate);
+	room.setStartHour(startHour);
+	room.setEndHour(endHour);
+	return room;
+    }
 
 }

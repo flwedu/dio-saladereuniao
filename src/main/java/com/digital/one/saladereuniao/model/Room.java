@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.digital.one.saladereuniao.DTO.RoomDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,9 +44,19 @@ public class Room {
     @Column(name = "end_hour")
     private LocalTime endHour;
 
+    public RoomDTO toDTO() {
+	RoomDTO dto = new RoomDTO();
+	dto.setId(id);
+	dto.setName(name);
+	dto.setReservationDate(reservationDate);
+	dto.setStartHour(startHour);
+	dto.setEndHour(endHour);
+	return dto;
+    }
+
     @Override
     public String toString() {
-        return "Room{" + "id=" + id + ", name='" + name + '\'' + ", date='" + reservationDate + '\'' + ", startHour='"
-                + startHour + '\'' + ", endHour='" + endHour + '\'' + '}';
+	return "Room{" + "id=" + id + ", name='" + name + '\'' + ", date='" + reservationDate + '\'' + ", startHour='"
+		+ startHour + '\'' + ", endHour='" + endHour + '\'' + '}';
     }
 }
