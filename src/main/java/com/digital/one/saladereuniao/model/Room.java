@@ -17,25 +17,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "meetingrooms")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Table(name = "rooms")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 
+    @Column(name = "reservation_date")
     private LocalDate reservationDate;
 
+    @Column(name = "start_hour")
     private LocalTime startHour;
 
+    @Column(name = "end_hour")
     private LocalTime endHour;
 
     @Override
