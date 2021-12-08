@@ -30,38 +30,38 @@ public class RoomController {
 
     @GetMapping()
     public ResponseEntity<List<Room>> getAllRooms() {
-        return ResponseEntity.ok(roomService.findAll());
+	return ResponseEntity.ok(roomService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
-        Room room = findRoom(id);
-        return ResponseEntity.ok(room);
+	Room room = findRoom(id);
+	return ResponseEntity.ok(room);
     }
 
     @PostMapping()
     public ResponseEntity<Room> createRoom(@Valid @RequestBody Room newRoom) {
-        return ResponseEntity.ok(roomService.save(newRoom));
+	return ResponseEntity.ok(roomService.save(newRoom));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @Valid @RequestBody Room newRoomData)
-            throws ResourceNotFoundException {
-        Room room = findRoom(id);
-        room.setName(newRoomData.getName());
-        room.setDate(newRoomData.getDate());
-        room.setStartHour(newRoomData.getStartHour());
-        room.setEndHour(newRoomData.getEndHour());
-        return ResponseEntity.ok(roomService.save(room));
+	    throws ResourceNotFoundException {
+	Room room = findRoom(id);
+	room.setName(newRoomData.getName());
+	room.setReservationDate(newRoomData.getReservationDate());
+	room.setStartHour(newRoomData.getStartHour());
+	room.setEndHour(newRoomData.getEndHour());
+	return ResponseEntity.ok(roomService.save(room));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) {
-        roomService.deleteById(id);
-        return ResponseEntity.ok().build();
+	roomService.deleteById(id);
+	return ResponseEntity.ok().build();
     }
 
     private Room findRoom(Long id) throws ResourceNotFoundException {
-        return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
+	return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
     }
 }
