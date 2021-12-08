@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
-import com.digital.one.saladereuniao.DTO.RoomMapper;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -30,44 +29,42 @@ public class RoomController {
 
     @Autowired
     public RoomController(RoomService roomService) {
-	this.roomService = roomService;
+        this.roomService = roomService;
     }
 
     @GetMapping()
     public ResponseEntity<List<RoomDTO>> getAllRooms() {
-	return ResponseEntity.ok(roomService.findAll().stream().map(RoomMapper::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok(roomService.findAll().stream().map(Room::toDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
-	Room room = findRoom(id);
-	return ResponseEntity.ok(RoomMapper.toDTO(room));
+        Room room = findRoom(id);
+        return ResponseEntity.ok(room.toDTO());
     }
 
     @PostMapping()
     public ResponseEntity<RoomDTO> createRoom(@Valid @RequestBody RoomDTO room) {
-	Room roomToSave = RoomMapper.toEntity(room);
-	RoomDTO savedRoom = RoomMapper.toDTO(roomService.save(roomToSave));
-	return ResponseEntity.ok(savedRoom);
+        Room savedRoom = roomService.save(room.toEntity());
+        return ResponseEntity.ok(savedRoom.toDTO());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO newRoomData)
-	    throws ResourceNotFoundException {
-	findRoom(id);
-	Room room = RoomMapper.toEntity(newRoomData);
-	room.setId(id);
-	return ResponseEntity.ok(RoomMapper.toDTO(roomService.save(room)));
+            throws ResourceNotFoundException {
+        findRoom(id);
+        Room updatedRoom = roomService.save(newRoomData.toEntity());
+        return ResponseEntity.ok(updatedRoom.toDTO());
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) {
-	roomService.deleteById(id);
-	return ResponseEntity.ok().build();
+        roomService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     private Room findRoom(Long id) throws ResourceNotFoundException {
-	return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
+        return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
     }
 }
