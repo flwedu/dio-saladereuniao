@@ -4,7 +4,7 @@ import com.digital.one.saladereuniao.model.Room;
 
 public class RoomMapper {
 
-    static Room toEntity(RoomDTO dto) {
+    public Room toEntity(RoomDTO dto) {
         return new Room(
                 dto.getId(),
                 dto.getName(),
@@ -13,7 +13,7 @@ public class RoomMapper {
                 dto.getEndHour());
     }
 
-    static RoomDTO toDTO(Room room) {
+    public RoomDTO toDTO(Room room) {
         return new RoomDTO(
                 room.getId(),
                 room.getName(),
