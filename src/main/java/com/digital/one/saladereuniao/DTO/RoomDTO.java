@@ -11,6 +11,7 @@ import com.digital.one.saladereuniao.model.Room;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class RoomDTO {
 
     private Long id;
@@ -40,13 +42,13 @@ public class RoomDTO {
     private LocalTime endHour;
 
     public Room toEntity() {
-	Room room = new Room();
-	room.setId(id);
-	room.setName(name);
-	room.setReservationDate(reservationDate);
-	room.setStartHour(startHour);
-	room.setEndHour(endHour);
-	return room;
+        Room room = new Room();
+        room.setId(id);
+        room.setName(name);
+        room.setReservationDate(reservationDate);
+        room.setStartHour(startHour);
+        room.setEndHour(endHour);
+        return room;
     }
 
 }
