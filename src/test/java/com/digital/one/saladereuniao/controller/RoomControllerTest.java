@@ -1,5 +1,8 @@
 package com.digital.one.saladereuniao.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -14,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.controler.RoomController;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -36,7 +40,7 @@ public class RoomControllerTest {
     }
 
     @Test
-    @DisplayName("Should return Sucess (200) HTTP status code when searched for one existing room")
+    @DisplayName("Should return Sucess (200) HTTP status code when searched for one existing room and body contais room")
     public void shouldReturnSucess_WhenSearchedForRoom() {
 
         Optional<Room> room = Optional.of(new Room(1L, "Room 1", LocalDate.now().plusDays(2), LocalTime.of(10, 0),
@@ -44,16 +48,19 @@ public class RoomControllerTest {
 
         Mockito.when(roomService.findById(1L)).thenReturn(room);
 
-        RestAssuredMockMvc.given().accept(ContentType.JSON).when().get("/api/v1/rooms/{id}", 1L).then()
-                .statusCode(HttpStatus.OK.value());
+        RoomDTO responseRoomDTO = RestAssuredMockMvc.given().accept(ContentType.JSON).when()
+                .get("/api/v1/rooms/{id}", 1L).then()
+                .statusCode(HttpStatus.OK.value()).extract().as(RoomDTO.class);
 
+        assertEquals(room.get().toDTO(), responseRoomDTO);
     }
 
     @Test
     @DisplayName("Should return Sucess (200) HTTP status code when searched for all rooms list")
     public void shouldReturnSucess_WhenSearchedForAllRoomsList() {
 
-        List<Room> list = List.of(new Room());
+        List<Room> list = List.of(new Room(1L, "Room 1", LocalDate.now().plusDays(2), LocalTime.of(10, 0),
+                LocalTime.NOON));
 
         Mockito.when(roomService.findAll()).thenReturn(list);
 
