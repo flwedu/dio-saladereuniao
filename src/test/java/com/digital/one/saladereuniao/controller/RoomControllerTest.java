@@ -71,8 +71,7 @@ public class RoomControllerTest {
         @DisplayName("Should return Not Found (404) HTTP status code when don't found a room resource")
         public void shouldReturnNotFound_WhenSearchedForANonexistentRoom() {
 
-                Optional<Room> notARoom = Optional.empty();
-                Mockito.when(roomService.findById(1L)).thenReturn(notARoom);
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
                 RestAssuredMockMvc.given().accept(ContentType.JSON).when().get("/api/v1/rooms/{id}", 1L).then()
                                 .statusCode(HttpStatus.NOT_FOUND.value());
