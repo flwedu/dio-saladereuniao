@@ -145,6 +145,20 @@ public class RoomControllerTest {
                                 .statusCode(HttpStatus.ACCEPTED.value());
         }
 
+        @Test
+        @DisplayName("Should return NotFound (404) when deleting a room nonexistent room")
+        public void shouldReturnNotFound_WhenDeletingANonExistentRoom() {
+
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+                RestAssuredMockMvc.given()
+                                .accept(ContentType.JSON)
+                                .when()
+                                .delete("/api/v1/rooms/{id}", 1L)
+                                .then()
+                                .statusCode(HttpStatus.NOT_FOUND.value());
+        }
+
         private Room createFakeRoom() {
                 return new Room(1L, "Room 1", LocalDate.now().plusDays(2), LocalTime.of(10, 0),
                                 LocalTime.NOON);
