@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +55,7 @@ public class RoomController {
             throws ResourceNotFoundException {
         findRoom(id);
         Room updatedRoom = roomService.save(newRoomData.toEntity());
-        return ResponseEntity.ok(updatedRoom.toDTO());
+        return new ResponseEntity<RoomDTO>(updatedRoom.toDTO(), HttpStatus.ACCEPTED);
 
     }
 
