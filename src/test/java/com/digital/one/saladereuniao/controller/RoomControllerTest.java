@@ -98,7 +98,7 @@ public class RoomControllerTest {
         }
 
         @Test
-        @DisplayName("Should return Accepted (201) when updating a room")
+        @DisplayName("Should return Accepted (202) when updating a room")
         public void shouldReturnAccepted_WhenUpdatingARoom() {
 
                 Room room = createFakeRoom();
@@ -119,7 +119,7 @@ public class RoomControllerTest {
         }
 
         @Test
-        @DisplayName("Should return Accepted (201) when deleting a room")
+        @DisplayName("Should return Accepted (202) when deleting a room")
         public void shouldReturnAccepted_WhenDeletingARoom() {
 
                 RestAssuredMockMvc.given()
