@@ -38,7 +38,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    @DisplayName("Should return a list with all rooms")
+    @DisplayName("Should return a list with all mocked rooms")
     void shouldReturnAListWithAllRooms() {
 
         List<Room> returnedList = service.findAll();
