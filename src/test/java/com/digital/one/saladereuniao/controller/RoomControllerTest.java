@@ -118,6 +118,20 @@ public class RoomControllerTest {
         }
 
         @Test
+        @DisplayName("Should return Not Found (404) when updating a nonexistent room")
+        public void shouldReturnNotFound_WhenUpdatingANonExistentRoom() {
+
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+                RestAssuredMockMvc.given()
+                                .accept(ContentType.JSON)
+                                .when()
+                                .put("/api/v1/rooms/{id}", 1L)
+                                .then()
+                                .statusCode(HttpStatus.NOT_FOUND.value());
+        }
+
+        @Test
         @DisplayName("Should return Accepted (202) when deleting a room")
         public void shouldReturnAccepted_WhenDeletingARoom() {
 
