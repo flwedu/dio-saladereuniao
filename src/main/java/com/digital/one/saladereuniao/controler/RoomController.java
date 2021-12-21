@@ -62,7 +62,7 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) {
         roomService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     private Room findRoom(Long id) throws ResourceNotFoundException {
