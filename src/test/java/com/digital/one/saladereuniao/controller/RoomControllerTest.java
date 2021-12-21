@@ -45,7 +45,7 @@ public class RoomControllerTest {
                 Optional<Room> room = Optional
                                 .of(createFakeRoom());
 
-                Mockito.when(roomService.findById(1L)).thenReturn(room);
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(room);
 
                 RoomDTO responseRoomDTO = RestAssuredMockMvc.given().accept(ContentType.JSON).when()
                                 .get("/api/v1/rooms/{id}", 1L).then()
