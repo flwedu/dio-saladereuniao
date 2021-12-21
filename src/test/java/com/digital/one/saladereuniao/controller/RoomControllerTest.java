@@ -122,6 +122,8 @@ public class RoomControllerTest {
         @DisplayName("Should return Accepted (202) when deleting a room")
         public void shouldReturnAccepted_WhenDeletingARoom() {
 
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.of(Mockito.mock(Room.class)));
+
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
                                 .when()
