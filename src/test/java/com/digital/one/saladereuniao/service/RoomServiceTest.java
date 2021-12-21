@@ -55,8 +55,7 @@ public class RoomServiceTest {
 
         Optional<Room> findedInService = service.findById(id);
 
-        Assertions.assertTrue(findedInService.isPresent());
-        Assertions.assertEquals(findedInService, findedInMock);
+        Assertions.assertEquals(findedInService.get(), room);
 
     }
 
