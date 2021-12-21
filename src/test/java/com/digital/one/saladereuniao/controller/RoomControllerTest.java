@@ -125,6 +125,8 @@ public class RoomControllerTest {
 
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
+                                .contentType(ContentType.JSON)
+                                .body(createFakeRoom().toDTO())
                                 .when()
                                 .put("/api/v1/rooms/{id}", 1L)
                                 .then()
