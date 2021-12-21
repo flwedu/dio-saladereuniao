@@ -15,7 +15,6 @@ import com.digital.one.saladereuniao.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -117,6 +116,18 @@ public class RoomControllerTest {
                                 .extract()
                                 .as(RoomDTO.class);
                 assertEquals(responseRoomDto, room.toDTO());
+        }
+
+        @Test
+        @DisplayName("Should return Accepted (201) when deleting a room")
+        public void shouldReturnAccepted_WhenDeletingARoom() {
+
+                RestAssuredMockMvc.given()
+                                .accept(ContentType.JSON)
+                                .when()
+                                .delete("/api/v1/rooms/{id}", 1L)
+                                .then()
+                                .statusCode(HttpStatus.ACCEPTED.value());
         }
 
         private Room createFakeRoom() {
