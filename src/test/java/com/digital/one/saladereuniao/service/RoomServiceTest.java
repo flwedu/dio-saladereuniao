@@ -1,5 +1,8 @@
 package com.digital.one.saladereuniao.service;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -32,17 +35,17 @@ public class RoomServiceTest {
 
         repository = Mockito.mock(RoomRepository.class);
         service = new RoomService(repository);
-
-        Mockito.when(repository.findAll()).thenReturn(mockList);
-
     }
 
     @Test
     @DisplayName("Should return a list with all mocked rooms")
     void shouldReturnAListWithAllRooms() {
 
+        Mockito.when(repository.findAll()).thenReturn(mockList);
+
         List<Room> returnedList = service.findAll();
-        Assertions.assertEquals(mockList, returnedList);
+        assertFalse(returnedList.isEmpty());
+        assertIterableEquals(returnedList, mockList);
     }
 
     @DisplayName("Should find a room")
@@ -50,8 +53,8 @@ public class RoomServiceTest {
     @ValueSource(longs = { 1L, 2L, 3L })
     void shouldFindAnElement(Long id) {
 
-        Optional<Room> findedInMock = mockList.stream().filter(room -> room.getId().equals(id)).findFirst();
-        Mockito.when(repository.findById(id)).thenReturn(findedInMock);
+        Room room = Mockito.mock(Room.class);
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(room));
 
         Optional<Room> findedInService = service.findById(id);
 
@@ -64,12 +67,10 @@ public class RoomServiceTest {
     @ValueSource(longs = { 4L, 5L, 6L })
     void shouldNotFindAnElement(Long id) {
 
-        Optional<Room> findedInMock = mockList.stream().filter(room -> room.getId().equals(id)).findFirst();
-        Mockito.when(repository.findById(id)).thenReturn(findedInMock);
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         Optional<Room> findedInService = service.findById(id);
 
         Assertions.assertTrue(findedInService.isEmpty());
-
     }
 }
