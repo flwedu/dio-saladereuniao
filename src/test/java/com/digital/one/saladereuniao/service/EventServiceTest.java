@@ -12,6 +12,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public class EventServiceTest {
 
@@ -28,19 +29,22 @@ public class EventServiceTest {
     @Test
     public void shouldReturnAllEventsListByRoom() {
 
-        when(repository.findAllByRoomId(anyLong())).thenReturn(List.of(mock(Event.class)));
+        PageImpl<Event> returnedPage = new PageImpl<>(List.of(mock(Event.class)));
+        PageRequest page = PageRequest.of(0, 5);
+        when(repository.findAllByRoomId(anyLong(), any(Pageable.class))).thenReturn(returnedPage);
 
-        List<Event> events = service.findAllByRoomId(1L);
+        Page<Event> events = service.findAllByRoomId(1L, page);
 
-        verify(repository, times(1)).findAllByRoomId(1L);
-        assertFalse(events.isEmpty());
+        verify(repository, times(1)).findAllByRoomId(1L, page);
+        assertEquals(events.getNumberOfElements(), 1);
+        assertEquals(events.getTotalPages(), 1);
     }
 
     @Test
     public void shouldReturnAllEventsByPage() {
 
         PageImpl<Event> returnedPage = new PageImpl<>(List.of(mock(Event.class)));
-        when(repository.findAll(any(PageRequest.class))).thenReturn(returnedPage);
+        when(repository.findAll(any(Pageable.class))).thenReturn(returnedPage);
 
         PageRequest page = PageRequest.of(0, 5);
 

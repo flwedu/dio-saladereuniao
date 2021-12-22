@@ -1,7 +1,5 @@
 package com.digital.one.saladereuniao.service;
 
-import java.util.List;
-
 import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
 
@@ -17,8 +15,8 @@ public class EventService {
         this.repository = repository;
     }
 
-    public List<Event> findAllByRoomId(Long roomId) {
-        return this.repository.findAllByRoomId(roomId);
+    public Page<Event> findAllByRoomId(Long roomId, Pageable pageable) {
+        return this.repository.findAllByRoomId(roomId, pageable);
     }
 
     public Page<Event> findAll(Pageable pageable) {
