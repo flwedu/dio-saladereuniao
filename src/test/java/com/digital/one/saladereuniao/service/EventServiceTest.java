@@ -1,6 +1,7 @@
 package com.digital.one.saladereuniao.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
@@ -66,6 +67,28 @@ public class EventServiceTest {
 
         verify(repository, times(1)).save(event);
         assertEquals(createdEvent, event);
+    }
+
+    @Test
+    public void shouldFindAnElementById() {
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(EventFaker.createFakeEvent(1L)));
+
+        Optional<Event> event = service.findById(1L);
+
+        verify(repository, times(1)).findById(1L);
+        assertTrue(event.isPresent());
+    }
+
+    @Test
+    public void shouldNotFindAnElementById() {
+
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<Event> event = service.findById(1L);
+
+        verify(repository, times(1)).findById(1L);
+        assertTrue(event.isEmpty());
     }
 
 }
