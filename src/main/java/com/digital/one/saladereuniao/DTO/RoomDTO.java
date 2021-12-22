@@ -29,22 +29,13 @@ public class RoomDTO {
     @Length(min = 2, max = 25)
     private String name;
 
-    @NotNull
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate reservationDate;
-
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime startHour;
-
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime endHour;
+    private String description;
 
     public Room toEntity() {
         Room room = new Room();
         room.setId(id);
         room.setName(name);
+        room.setDescription(description);
         return room;
     }
 
