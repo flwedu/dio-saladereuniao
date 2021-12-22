@@ -2,8 +2,6 @@ package com.digital.one.saladereuniao.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +9,7 @@ import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.controler.RoomController;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
+import com.digital.one.saladereuniao.utils.RoomFaker;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,7 @@ public class RoomControllerTest {
         public void shouldReturnSucess_WhenSearchedForRoom() {
 
                 Optional<Room> room = Optional
-                                .of(createFakeRoom());
+                                .of(RoomFaker.createFakeRoom(1L));
 
                 Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(room);
 
@@ -58,7 +57,7 @@ public class RoomControllerTest {
         @DisplayName("Should return Sucess (200) HTTP status code when searched for all rooms list")
         public void shouldReturnSucess_WhenSearchedForAllRoomsList() {
 
-                List<Room> list = List.of(createFakeRoom());
+                List<Room> list = List.of(RoomFaker.createFakeRoom(1L));
 
                 Mockito.when(roomService.findAll()).thenReturn(list);
 
@@ -82,7 +81,7 @@ public class RoomControllerTest {
         @DisplayName("Should return Sucess (200) HTTP status code when creating a room and the response body contais the room DTO")
         public void shouldReturnCreated_WhenCreatingARoom() {
 
-                Room room = createFakeRoom();
+                Room room = RoomFaker.createFakeRoom(1L);
                 Mockito.when(roomService.save(Mockito.any())).thenReturn(room);
 
                 RestAssuredMockMvc
@@ -100,7 +99,7 @@ public class RoomControllerTest {
         @DisplayName("Should return Accepted (202) when updating a room")
         public void shouldReturnAccepted_WhenUpdatingARoom() {
 
-                Room room = createFakeRoom();
+                Room room = RoomFaker.createFakeRoom(1L);
                 Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.of(room));
                 Mockito.when(roomService.save(Mockito.any(Room.class))).thenReturn(room);
 
@@ -126,7 +125,7 @@ public class RoomControllerTest {
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
                                 .contentType(ContentType.JSON)
-                                .body(createFakeRoom().toDTO())
+                                .body(RoomFaker.createFakeRoomDto(1L))
                                 .when()
                                 .put("/api/v1/rooms/{id}", 1L)
                                 .then()
@@ -159,11 +158,6 @@ public class RoomControllerTest {
                                 .delete("/api/v1/rooms/{id}", 1L)
                                 .then()
                                 .statusCode(HttpStatus.NOT_FOUND.value());
-        }
-
-        private Room createFakeRoom() {
-                return new Room(1L, "Room 1", LocalDate.now().plusDays(2), LocalTime.of(10, 0),
-                                LocalTime.NOON);
         }
 
 }
