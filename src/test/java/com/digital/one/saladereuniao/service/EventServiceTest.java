@@ -32,8 +32,23 @@ public class EventServiceTest {
 
         List<Event> events = service.findAllByRoomId(1L);
 
-        Mockito.verify(repository, Mockito.times(1)).findAllByRoomId(1L);
-        Assertions.assertFalse(events.isEmpty());
+        verify(repository, times(1)).findAllByRoomId(1L);
+        assertFalse(events.isEmpty());
+    }
+
+    @Test
+    public void shouldReturnAllEventsByPage() {
+
+        PageImpl<Event> returnedPage = new PageImpl<>(List.of(mock(Event.class)));
+        when(repository.findAll(any(PageRequest.class))).thenReturn(returnedPage);
+
+        PageRequest page = PageRequest.of(0, 5);
+
+        Page<Event> events = service.findAll(page);
+
+        verify(repository, times(1)).findAll(page);
+        assertEquals(events.getNumberOfElements(), 1);
+        assertEquals(events.getTotalPages(), 1);
     }
 
 }
