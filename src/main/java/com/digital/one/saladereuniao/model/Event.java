@@ -23,6 +23,10 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String name;
+    private String description;
+
     @ManyToOne
     Room room;
 
