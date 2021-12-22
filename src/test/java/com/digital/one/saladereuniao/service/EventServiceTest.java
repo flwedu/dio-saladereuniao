@@ -5,10 +5,13 @@ import java.util.List;
 import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 public class EventServiceTest {
 
@@ -18,14 +21,14 @@ public class EventServiceTest {
 
     @BeforeEach
     public void setup() {
-        repository = Mockito.mock(EventRepository.class);
+        repository = mock(EventRepository.class);
         service = new EventService(repository);
     }
 
     @Test
     public void shouldReturnAllEventsListByRoom() {
 
-        Mockito.when(repository.findAllByRoomId(Mockito.anyLong())).thenReturn(List.of(Mockito.mock(Event.class)));
+        when(repository.findAllByRoomId(anyLong())).thenReturn(List.of(mock(Event.class)));
 
         List<Event> events = service.findAllByRoomId(1L);
 
