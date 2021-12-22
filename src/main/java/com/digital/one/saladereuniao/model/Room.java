@@ -1,7 +1,5 @@
 package com.digital.one.saladereuniao.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +13,14 @@ import javax.persistence.Table;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "rooms")
 public class Room {
 
@@ -32,19 +32,17 @@ public class Room {
     @Column(nullable = false, name = "name")
     private String name;
 
+    private String description;
+
     @OneToMany
     @Column(name = "events")
     private List<Event> events = new ArrayList<Event>();
-
-    public Room(Long id, String name, LocalDate reservationDate, LocalTime startHour, LocalTime endHour) {
-        this.id = id;
-        this.name = name;
-    }
 
     public RoomDTO toDTO() {
         RoomDTO dto = new RoomDTO();
         dto.setId(id);
         dto.setName(name);
+        dto.setDescription(description);
         return dto;
     }
 }
