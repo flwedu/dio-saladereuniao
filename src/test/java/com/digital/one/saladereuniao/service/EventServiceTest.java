@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
+import com.digital.one.saladereuniao.utils.EventFaker;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,18 @@ public class EventServiceTest {
         verify(repository, times(1)).findAll(page);
         assertEquals(events.getNumberOfElements(), 1);
         assertEquals(events.getTotalPages(), 1);
+    }
+
+    @Test
+    public void shouldSaveAnEvent() {
+
+        Event event = EventFaker.createFakeEvent(1L);
+        when(repository.save(any(Event.class))).thenReturn(event);
+
+        Event createdEvent = service.save(event);
+
+        verify(repository, times(1)).save(event);
+        assertEquals(createdEvent, event);
     }
 
 }
