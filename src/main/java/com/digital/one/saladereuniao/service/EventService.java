@@ -6,6 +6,8 @@ import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class EventService {
 
@@ -17,6 +19,10 @@ public class EventService {
 
     public List<Event> findAllByRoomId(Long roomId) {
         return this.repository.findAllByRoomId(roomId);
+    }
+
+    public Page<Event> findAll(Pageable pageable) {
+        return this.repository.findAll(pageable);
     }
 
 }
