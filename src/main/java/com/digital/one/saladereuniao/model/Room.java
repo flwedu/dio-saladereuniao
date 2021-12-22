@@ -17,13 +17,10 @@ import com.digital.one.saladereuniao.DTO.RoomDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
 @Table(name = "rooms")
 public class Room {
 
@@ -44,19 +41,25 @@ public class Room {
     @Column(name = "end_hour")
     private LocalTime endHour;
 
-    public RoomDTO toDTO() {
-	RoomDTO dto = new RoomDTO();
-	dto.setId(id);
-	dto.setName(name);
-	dto.setReservationDate(reservationDate);
-	dto.setStartHour(startHour);
-	dto.setEndHour(endHour);
-	return dto;
+    @OneToMany
+    @Column(name = "events")
+    private List<Event> events = new ArrayList<Event>();
+
+    public Room(Long id, String name, LocalDate reservationDate, LocalTime startHour, LocalTime endHour) {
+        this.id = id;
+        this.name = name;
+        this.reservationDate = reservationDate;
+        this.startHour = startHour;
+        this.endHour = endHour;
     }
 
-    @Override
-    public String toString() {
-	return "Room{" + "id=" + id + ", name='" + name + '\'' + ", date='" + reservationDate + '\'' + ", startHour='"
-		+ startHour + '\'' + ", endHour='" + endHour + '\'' + '}';
+    public RoomDTO toDTO() {
+        RoomDTO dto = new RoomDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setReservationDate(reservationDate);
+        dto.setStartHour(startHour);
+        dto.setEndHour(endHour);
+        return dto;
     }
 }
