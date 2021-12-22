@@ -1,5 +1,7 @@
 package com.digital.one.saladereuniao.service;
 
+import java.util.Optional;
+
 import com.digital.one.saladereuniao.model.Event;
 import com.digital.one.saladereuniao.repository.EventRepository;
 
@@ -21,6 +23,18 @@ public class EventService {
 
     public Page<Event> findAll(Pageable pageable) {
         return this.repository.findAll(pageable);
+    }
+
+    public Optional<Event> findById(Long id) {
+        return this.repository.findById(id);
+    }
+
+    public Event save(Event event) {
+        return this.repository.save(event);
+    }
+
+    public void delete(Long id) {
+        this.repository.deleteById(id);
     }
 
 }
