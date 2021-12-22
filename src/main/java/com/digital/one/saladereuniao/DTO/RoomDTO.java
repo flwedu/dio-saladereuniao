@@ -45,9 +45,6 @@ public class RoomDTO {
         Room room = new Room();
         room.setId(id);
         room.setName(name);
-        room.setReservationDate(reservationDate);
-        room.setStartHour(startHour);
-        room.setEndHour(endHour);
         return room;
     }
 
