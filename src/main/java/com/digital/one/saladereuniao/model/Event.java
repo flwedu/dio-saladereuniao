@@ -27,7 +27,7 @@ public class Event {
     Room room;
 
     @Column(nullable = false)
-    private LocalDateTime startTime;
+    private LocalDateTime startingTime;
 
     @Column(nullable = false)
     private LocalDateTime endingTime;
