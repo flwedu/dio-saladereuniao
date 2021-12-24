@@ -1,7 +1,7 @@
 package com.digital.one.saladereuniao.controler;
 
-import com.digital.one.saladereuniao.model.Event;
-import com.digital.one.saladereuniao.service.EventService;
+import com.digital.one.saladereuniao.model.RoomEvent;
+import com.digital.one.saladereuniao.service.RoomEventService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/events")
-public class EventController {
+public class RoomEventController {
 
-    private EventService eventService;
+    private RoomEventService eventService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public RoomEventController(RoomEventService eventService) {
         this.eventService = eventService;
     }
 
     @GetMapping("/page/{pageNumber}")
-    public ResponseEntity<Page<Event>> getAllEvents(@PathVariable("pageNumber") int pageNumber) {
+    public ResponseEntity<Page<RoomEvent>> getAllEvents(@PathVariable("pageNumber") int pageNumber) {
 
         PageRequest page = PageRequest.of(pageNumber, 10);
         return ResponseEntity.ok().body(eventService.findAll(page));
