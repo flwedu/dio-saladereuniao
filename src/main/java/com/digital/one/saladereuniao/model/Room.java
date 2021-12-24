@@ -36,7 +36,7 @@ public class Room {
 
     @OneToMany
     @Column(name = "events")
-    private List<Event> events = new ArrayList<Event>();
+    private List<RoomEvent> events = new ArrayList<RoomEvent>();
 
     public RoomDTO toDTO() {
         RoomDTO dto = new RoomDTO();
