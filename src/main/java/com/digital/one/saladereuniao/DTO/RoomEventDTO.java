@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
+import com.digital.one.saladereuniao.model.RoomEvent;
+
 import org.hibernate.validator.constraints.Length;
 
 import lombok.AllArgsConstructor;
@@ -34,4 +36,15 @@ public class RoomEventDTO {
     private LocalDateTime startingTime;
 
     private LocalDateTime endingTime;
+
+    public RoomEvent toEntity() {
+
+        RoomEvent event = new RoomEvent();
+        event.setId(id);
+        event.setName(name);
+        event.setDescription(description);
+        event.setStartingTime(startingTime);
+        event.setEndingTime(endingTime);
+        return event;
+    }
 }
