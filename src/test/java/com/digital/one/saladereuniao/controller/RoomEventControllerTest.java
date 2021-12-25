@@ -24,15 +24,15 @@ import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @WebMvcTest
-public class EventControllerTest {
+public class RoomEventControllerTest {
 
     private static String baseUrl = "api/v1/events";
 
-    @Autowired
-    private RoomEventController eventController;
-
     @MockBean
     private RoomEventService eventService;
+
+    @Autowired
+    private RoomEventController eventController;
 
     @BeforeEach
     public void setup() {
