@@ -2,6 +2,7 @@ package com.digital.one.saladereuniao.controler;
 
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
+import com.digital.one.saladereuniao.service.RoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,12 @@ public class RoomEventController {
 
     private RoomEventService eventService;
 
+    private RoomService roomService;
+
     @Autowired
-    public RoomEventController(RoomEventService eventService) {
+    public RoomEventController(RoomEventService eventService, RoomService roomService) {
         this.eventService = eventService;
+        this.roomService = roomService;
     }
 
     @GetMapping("/events/page/{pageNumber}")
