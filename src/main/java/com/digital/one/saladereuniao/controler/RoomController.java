@@ -54,6 +54,7 @@ public class RoomController {
     public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO newRoomData)
             throws ResourceNotFoundException {
         findRoom(id);
+        newRoomData.setId(id);
         Room updatedRoom = roomService.save(newRoomData.toEntity());
         return new ResponseEntity<RoomDTO>(updatedRoom.toDTO(), HttpStatus.ACCEPTED);
 
