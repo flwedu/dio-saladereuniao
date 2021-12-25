@@ -16,21 +16,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@WebMvcTest
+@SpringBootTest
 public class RoomControllerTest {
-
-        @Autowired
-        private RoomController roomController;
 
         @MockBean
         private RoomService roomService;
+
+        @Autowired
+        private RoomController roomController;
 
         @BeforeEach
         public void setup() {
