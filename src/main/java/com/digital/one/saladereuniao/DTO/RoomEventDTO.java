@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class EventDto {
+public class RoomEventDTO {
 
     private Long id;
 
