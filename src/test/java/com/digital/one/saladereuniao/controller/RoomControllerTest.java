@@ -14,6 +14,8 @@ import com.digital.one.saladereuniao.utils.RoomFaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -95,12 +97,13 @@ public class RoomControllerTest {
                                 .statusCode(HttpStatus.OK.value());
         }
 
-        @Test
+        @ParameterizedTest
+        @ValueSource(longs = { 1L, 2L, 3L })
         @DisplayName("Should return Accepted (202) when updating a room")
-        public void shouldReturnAccepted_WhenUpdatingARoom() {
+        public void shouldReturnAccepted_WhenUpdatingARoom(Long id) {
 
-                Room room = RoomFaker.createFakeRoom(1L);
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.of(room));
+                Room room = RoomFaker.createFakeRoom(id);
+                Mockito.when(roomService.findById(id)).thenReturn(Optional.of(room));
                 Mockito.when(roomService.save(Mockito.any(Room.class))).thenReturn(room);
 
                 RoomDTO responseRoomDto = RestAssuredMockMvc.given()
@@ -108,7 +111,7 @@ public class RoomControllerTest {
                                 .contentType(ContentType.JSON)
                                 .body(room)
                                 .when()
-                                .put("/api/v1/rooms/{id}", 1L)
+                                .put("/api/v1/rooms/{id}", id)
                                 .then()
                                 .statusCode(HttpStatus.ACCEPTED.value())
                                 .extract()
