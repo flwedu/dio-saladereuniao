@@ -10,7 +10,6 @@ import com.digital.one.saladereuniao.controler.RoomEventController;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,26 +17,25 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.restassured.http.ContentType;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-
-@WebMvcTest
+/**
+ * Testing with a diferent approach of RoomControllerTest.
+ * Here is used the @WebMvcTest annotation to test only the web layer, and the
+ * MockMvcRequestBuilders and MockMvcResultMatchers to build the test.
+ */
+@WebMvcTest(RoomEventController.class)
 public class RoomEventControllerTest {
 
     private static String baseUrl = "api/v1/events";
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @MockBean
     private RoomEventService eventService;
-
-    @Autowired
-    private RoomEventController eventController;
-
-    @BeforeEach
-    public void setup() {
-        RestAssuredMockMvc.standaloneSetup(eventController);
-    }
 
     @Test
     public void shouldReturnSucess_WhenRequestingAllRoms() {
@@ -45,8 +43,11 @@ public class RoomEventControllerTest {
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         when(eventService.findAll(any(Pageable.class))).thenReturn(responsePage);
 
-        RestAssuredMockMvc.given().accept(ContentType.JSON).when().get(baseUrl + "/page/{pageNumber}", 1).then()
-                .statusCode(HttpStatus.OK.value());
+        try {
+            mockMvc.perform(get(baseUrl + "/page/0")).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
