@@ -37,4 +37,13 @@ public class RoomEvent {
 
     @Column(nullable = false)
     private LocalDateTime endingTime;
+
+    public RoomEventDTO toDto() {
+        RoomEventDTO dto = new RoomEventDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setDescription(description);
+        dto.setRoomId(room.getId());
+        return dto;
+    }
 }
