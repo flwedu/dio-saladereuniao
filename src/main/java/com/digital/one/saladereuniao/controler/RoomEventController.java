@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/events")
+@RequestMapping("api/v1")
 public class RoomEventController {
 
     private RoomEventService eventService;
@@ -23,7 +23,7 @@ public class RoomEventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/page/{pageNumber}")
+    @GetMapping("/events/page/{pageNumber}")
     public ResponseEntity<Page<RoomEvent>> getAllEvents(@PathVariable("pageNumber") int pageNumber) {
 
         PageRequest page = PageRequest.of(pageNumber, 10);
