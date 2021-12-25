@@ -30,4 +30,14 @@ public class RoomEventController {
         return ResponseEntity.ok().body(eventService.findAll(page));
     }
 
+    @GetMapping("/rooms/{roomId}/events/page/{pageNumber}")
+    public ResponseEntity<Page<RoomEvent>> getEventsByRoom(@PathVariable("roomId") Long roomId,
+            @PathVariable("pageNumber") int pageNumber) {
+
+        PageRequest page = PageRequest.of(pageNumber, 10);
+
+        return ResponseEntity.ok().body(eventService.findAllByRoomId(roomId, page));
+
+    }
+
 }
