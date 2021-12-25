@@ -37,6 +37,9 @@ public class RoomEventControllerTest {
     @MockBean
     private RoomEventService eventService;
 
+    @MockBean
+    private RoomService roomService;
+
     @Test
     public void shouldReturnSucess_WhenRequestingAllRoms() {
 
