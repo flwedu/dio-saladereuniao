@@ -46,13 +46,14 @@ public class RoomEventController {
     public ResponseEntity<RoomEventDTO> save(@RequestBody @Valid RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
-        Room room = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
+        Room findRoom = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
         RoomEvent eventToSave = newEvent.toEntity();
-        eventToSave.setRoom(room);
-        room.getEvents().add(eventToSave);
-        roomService.save(room);
+
+        findRoom.getEvents().add(eventToSave);
+        eventToSave.setRoom(findRoom);
 
         RoomEvent savedEvent = eventService.save(eventToSave);
+        Room savedRoom = roomService.save(findRoom);
 
         return ResponseEntity.ok().body(savedEvent.toDto());
     }
