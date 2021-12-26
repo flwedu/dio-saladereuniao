@@ -5,7 +5,17 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.digital.one.saladereuniao.DTO.RoomDTO;
+import com.digital.one.saladereuniao.DTO.RoomEventDTO;
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
+import com.digital.one.saladereuniao.model.Room;
+import com.digital.one.saladereuniao.model.RoomEvent;
+import com.digital.one.saladereuniao.service.RoomService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,12 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.digital.one.saladereuniao.DTO.RoomDTO;
-import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
-import com.digital.one.saladereuniao.model.Room;
-import com.digital.one.saladereuniao.service.RoomService;
 
 @RestController
 @RequestMapping("api/v1/rooms")
@@ -42,6 +48,19 @@ public class RoomController {
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
         Room room = roomService.findRoomByIdOrThrowNotFoundException(id);
         return ResponseEntity.ok(room.toDTO());
+    }
+
+    @GetMapping("/{id}/events")
+    public ResponseEntity<Page<RoomEventDTO>> getEventsByRoomById(@PathVariable Long id,
+            @RequestParam(defaultValue = "0") Integer page) throws ResourceNotFoundException {
+
+        Room room = roomService.findRoomByIdOrThrowNotFoundException(id);
+
+        PageRequest pageConfig = PageRequest.of(page, 10);
+
+        Page<RoomEvent> eventsByRoomid = new PageImpl<>(room.getEvents(), pageConfig, room.getEvents().size());
+
+        return ResponseEntity.ok(eventsByRoomid.map(RoomEvent::toDto));
     }
 
     @PostMapping()
