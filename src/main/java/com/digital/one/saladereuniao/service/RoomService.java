@@ -1,5 +1,6 @@
 package com.digital.one.saladereuniao.service;
 
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     @Autowired
-    public RoomService(RoomRepository roomRepository){
+    public RoomService(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
@@ -26,11 +27,16 @@ public class RoomService {
         return roomRepository.findById(id);
     }
 
+    public Room findRoomByIdOrThrowNotFoundException(Long id) throws ResourceNotFoundException {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
+    }
+
     public Room save(Room room) {
         return roomRepository.save(room);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         roomRepository.deleteById(id);
     }
 }

@@ -40,7 +40,7 @@ public class RoomController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
-        Room room = findRoom(id);
+        Room room = roomService.findRoomByIdOrThrowNotFoundException(id);
         return ResponseEntity.ok(room.toDTO());
     }
 
@@ -53,7 +53,7 @@ public class RoomController {
     @PutMapping("/{id}")
     public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO newRoomData)
             throws ResourceNotFoundException {
-        findRoom(id);
+        roomService.findRoomByIdOrThrowNotFoundException(id);
         newRoomData.setId(id);
         Room updatedRoom = roomService.save(newRoomData.toEntity());
         return new ResponseEntity<RoomDTO>(updatedRoom.toDTO(), HttpStatus.ACCEPTED);
@@ -62,12 +62,9 @@ public class RoomController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) throws ResourceNotFoundException {
-        findRoom(id);
+        roomService.findRoomByIdOrThrowNotFoundException(id);
         roomService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    private Room findRoom(Long id) throws ResourceNotFoundException {
-        return roomService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room " + id + " not found"));
-    }
 }
