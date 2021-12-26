@@ -29,20 +29,6 @@ public class RoomEventServiceTest {
     }
 
     @Test
-    public void shouldReturnAllEventsListByRoom() {
-
-        PageImpl<RoomEvent> returnedPage = new PageImpl<>(List.of(mock(RoomEvent.class)));
-        PageRequest page = PageRequest.of(0, 5);
-        when(repository.findAllByRoomId(anyLong(), any(Pageable.class))).thenReturn(returnedPage);
-
-        Page<RoomEvent> events = service.findAllByRoomId(1L, page);
-
-        verify(repository, times(1)).findAllByRoomId(1L, page);
-        assertEquals(events.getNumberOfElements(), 1);
-        assertEquals(events.getTotalPages(), 1);
-    }
-
-    @Test
     public void shouldReturnAllEventsByPage() {
 
         PageImpl<RoomEvent> returnedPage = new PageImpl<>(List.of(mock(RoomEvent.class)));

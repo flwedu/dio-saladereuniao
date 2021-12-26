@@ -20,10 +20,6 @@ public class RoomEventService {
         this.roomEventRepository = roomEventRepository;
     }
 
-    public Page<RoomEvent> findAllByRoomId(Long roomId, Pageable pageable) {
-        return roomEventRepository.findAllByRoomId(roomId, pageable);
-    }
-
     public Page<RoomEvent> findAll(Pageable pageable) {
         return roomEventRepository.findAll(pageable);
     }
