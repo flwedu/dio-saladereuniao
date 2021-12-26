@@ -1,6 +1,5 @@
 package com.digital.one.saladereuniao.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -37,7 +36,7 @@ public class Room {
 
     @OneToMany(fetch = FetchType.LAZY)
     @Column(name = "events")
-    private List<RoomEvent> events = new ArrayList<RoomEvent>();
+    private List<RoomEvent> events;
 
     public RoomDTO toDTO() {
         RoomDTO dto = new RoomDTO();
