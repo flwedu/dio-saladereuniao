@@ -49,6 +49,8 @@ public class RoomEventController {
         Room room = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
         RoomEvent eventToSave = newEvent.toEntity();
         eventToSave.setRoom(room);
+        room.getEvents().add(eventToSave);
+        roomService.save(room);
 
         RoomEvent savedEvent = eventService.save(eventToSave);
 

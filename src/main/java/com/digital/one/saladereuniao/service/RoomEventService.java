@@ -7,7 +7,6 @@ import com.digital.one.saladereuniao.repository.RoomEventRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +34,6 @@ public class RoomEventService {
 
     public void delete(Long id) {
         roomEventRepository.deleteById(id);
-    }
-
-    public Page<RoomEvent> findAllByRoomId(Long id, PageRequest pageConfig) {
-        return roomEventRepository.findAllbyRoomId(id, pageConfig);
     }
 
 }
