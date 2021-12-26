@@ -35,20 +35,24 @@ public class RoomEventController {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<Page<RoomEvent>> getAllEvents(@RequestParam(defaultValue = "0") Integer page) {
+    public ResponseEntity<Page<RoomEventDTO>> getAllEvents(@RequestParam(defaultValue = "0") Integer page) {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
-        return ResponseEntity.ok().body(eventService.findAll(pageRequest));
+        Page<RoomEvent> events = eventService.findAll(pageRequest);
+        return ResponseEntity.ok().body(events.map(RoomEvent::toDto));
     }
 
     @PostMapping("/events")
-    public ResponseEntity<RoomEvent> save(@RequestBody @Valid RoomEventDTO newEvent) throws ResourceNotFoundException {
+    public ResponseEntity<RoomEventDTO> save(@RequestBody @Valid RoomEventDTO newEvent)
+            throws ResourceNotFoundException {
 
         Room room = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
         RoomEvent eventToSave = newEvent.toEntity();
         eventToSave.setRoom(room);
 
-        return ResponseEntity.ok().body(eventService.save(eventToSave));
+        RoomEvent savedEvent = eventService.save(eventToSave);
+
+        return ResponseEntity.ok().body(savedEvent.toDto());
     }
 
 }
