@@ -53,7 +53,7 @@ public class RoomEventController {
         eventToSave.setRoom(findRoom);
 
         RoomEvent savedEvent = eventService.save(eventToSave);
-        Room savedRoom = roomService.save(findRoom);
+        roomService.save(findRoom);
 
         return ResponseEntity.ok().body(savedEvent.toDto());
     }
