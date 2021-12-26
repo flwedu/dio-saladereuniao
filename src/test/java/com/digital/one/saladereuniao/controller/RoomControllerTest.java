@@ -3,10 +3,10 @@ package com.digital.one.saladereuniao.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.controler.RoomController;
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.service.RoomService;
 import com.digital.one.saladereuniao.utils.RoomFaker;
@@ -41,18 +41,17 @@ public class RoomControllerTest {
 
         @Test
         @DisplayName("Should return Sucess (200) HTTP status code when searched for one existing room and response body contains a room")
-        public void shouldReturnSucess_WhenSearchedForRoom() {
+        public void shouldReturnSucess_WhenSearchedForRoom() throws ResourceNotFoundException {
 
-                Optional<Room> room = Optional
-                                .of(RoomFaker.createFakeRoom(1L));
+                Room room = RoomFaker.createFakeRoom(1L);
 
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(room);
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(Mockito.anyLong())).thenReturn(room);
 
                 RoomDTO responseRoomDTO = RestAssuredMockMvc.given().accept(ContentType.JSON).when()
                                 .get("/api/v1/rooms/{id}", 1L).then()
                                 .statusCode(HttpStatus.OK.value()).extract().as(RoomDTO.class);
 
-                assertEquals(room.get().toDTO(), responseRoomDTO);
+                assertEquals(room.toDTO(), responseRoomDTO);
         }
 
         @Test
@@ -70,9 +69,10 @@ public class RoomControllerTest {
 
         @Test
         @DisplayName("Should return Not Found (404) HTTP status code when don't found a room resource")
-        public void shouldReturnNotFound_WhenSearchedForANonexistentRoom() {
+        public void shouldReturnNotFound_WhenSearchedForANonexistentRoom() throws ResourceNotFoundException {
 
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(Mockito.anyLong()))
+                                .thenThrow(new ResourceNotFoundException("Room not found"));
 
                 RestAssuredMockMvc.given().accept(ContentType.JSON).when().get("/api/v1/rooms/{id}", 1L).then()
                                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -100,10 +100,10 @@ public class RoomControllerTest {
         @ParameterizedTest
         @ValueSource(longs = { 1L, 2L, 3L })
         @DisplayName("Should return Accepted (202) when updating a room")
-        public void shouldReturnAccepted_WhenUpdatingARoom(Long id) {
+        public void shouldReturnAccepted_WhenUpdatingARoom(Long id) throws ResourceNotFoundException {
 
                 Room room = RoomFaker.createFakeRoom(id);
-                Mockito.when(roomService.findById(id)).thenReturn(Optional.of(room));
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(id)).thenReturn(room);
                 Mockito.when(roomService.save(Mockito.any(Room.class))).thenReturn(room);
 
                 RoomDTO responseRoomDto = RestAssuredMockMvc.given()
@@ -121,9 +121,10 @@ public class RoomControllerTest {
 
         @Test
         @DisplayName("Should return Not Found (404) when updating a nonexistent room")
-        public void shouldReturnNotFound_WhenUpdatingANonExistentRoom() {
+        public void shouldReturnNotFound_WhenUpdatingANonExistentRoom() throws ResourceNotFoundException {
 
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(Mockito.anyLong()))
+                                .thenThrow(new ResourceNotFoundException("Room not found"));
 
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
@@ -137,9 +138,10 @@ public class RoomControllerTest {
 
         @Test
         @DisplayName("Should return Accepted (202) when deleting a room")
-        public void shouldReturnAccepted_WhenDeletingARoom() {
+        public void shouldReturnAccepted_WhenDeletingARoom() throws ResourceNotFoundException {
 
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.of(Mockito.mock(Room.class)));
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(Mockito.anyLong()))
+                                .thenReturn(Mockito.mock(Room.class));
 
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
@@ -151,9 +153,10 @@ public class RoomControllerTest {
 
         @Test
         @DisplayName("Should return NotFound (404) when deleting a room nonexistent room")
-        public void shouldReturnNotFound_WhenDeletingANonExistentRoom() {
+        public void shouldReturnNotFound_WhenDeletingANonExistentRoom() throws ResourceNotFoundException {
 
-                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(Mockito.anyLong()))
+                                .thenThrow(new ResourceNotFoundException("Room not found"));
 
                 RestAssuredMockMvc.given()
                                 .accept(ContentType.JSON)
