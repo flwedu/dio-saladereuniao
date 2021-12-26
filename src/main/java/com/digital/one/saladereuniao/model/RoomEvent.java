@@ -46,6 +46,8 @@ public class RoomEvent {
         dto.setId(id);
         dto.setName(name);
         dto.setDescription(description);
+        dto.setStartingTime(startingTime);
+        dto.setEndingTime(endingTime);
         dto.setRoomId(room.getId());
         return dto;
     }
