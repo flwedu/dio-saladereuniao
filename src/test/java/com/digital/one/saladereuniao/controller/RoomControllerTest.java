@@ -1,6 +1,7 @@
 package com.digital.one.saladereuniao.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.List;
 
@@ -8,7 +9,9 @@ import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.controler.RoomController;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
+import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomService;
+import com.digital.one.saladereuniao.utils.RoomEventFaker;
 import com.digital.one.saladereuniao.utils.RoomFaker;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -164,6 +167,25 @@ public class RoomControllerTest {
                                 .delete("/api/v1/rooms/{id}", 1L)
                                 .then()
                                 .statusCode(HttpStatus.NOT_FOUND.value());
+        }
+
+        @Test
+        public void shouldReturnSucess_WhenRequestingAllEventsByRoom() throws ResourceNotFoundException {
+
+                Room room = RoomFaker.createFakeRoom(1L);
+                List<RoomEvent> events = List.of(RoomEventFaker.createFakeEvent(1L),
+                                RoomEventFaker.createFakeEvent(2L));
+                events.forEach(event -> event.setRoom(room));
+                room.setEvents(events);
+
+                Mockito.when(roomService.findRoomByIdOrThrowNotFoundException(anyLong())).thenReturn(room);
+
+                RestAssuredMockMvc.given()
+                                .accept(ContentType.JSON)
+                                .when()
+                                .get("api/v1/rooms/{id}/events", 1L)
+                                .then()
+                                .statusCode(HttpStatus.OK.value());
         }
 
 }
