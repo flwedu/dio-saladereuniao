@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,14 @@ public class RoomEventController {
         PageRequest pageRequest = PageRequest.of(page, 10);
         Page<RoomEvent> events = eventService.findAll(pageRequest);
         return ResponseEntity.ok().body(events.map(RoomEvent::toDto));
+    }
+
+    @GetMapping("/events{id}")
+    public ResponseEntity<RoomEvent> findById(@PathVariable Long id) throws ResourceNotFoundException {
+
+        RoomEvent event = eventService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Event id %s not found", id)));
+        return ResponseEntity.ok(event);
     }
 
     @PostMapping("/events")
