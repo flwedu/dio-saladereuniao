@@ -52,7 +52,7 @@ public class RoomEventController {
     }
 
     @PostMapping("/events")
-    public ResponseEntity<RoomEventDTO> save(@RequestBody @Valid RoomEventDTO newEvent)
+    public ResponseEntity<RoomEventDTO> save(@Valid @RequestBody RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
         Room findRoom = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
