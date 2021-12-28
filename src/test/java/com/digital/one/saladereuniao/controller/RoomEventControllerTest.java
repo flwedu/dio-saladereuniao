@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(RoomEventController.class)
 public class RoomEventControllerTest {
 
-    private static String baseUrl = "api/v1/events";
+    private static String baseUrl = "/api/v1/events";
 
     @Autowired
     private MockMvc mockMvc;
