@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
@@ -17,7 +18,11 @@ import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
 import com.digital.one.saladereuniao.service.RoomService;
 import com.digital.one.saladereuniao.utils.RoomEventFaker;
+import com.digital.one.saladereuniao.utils.RoomFaker;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -45,6 +50,15 @@ public class RoomEventControllerTest {
 
     @MockBean
     private RoomService roomService;
+
+    static ObjectMapper mapper = new ObjectMapper();
+
+    @BeforeAll
+    static void setup() {
+
+        mapper.findAndRegisterModules();
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
+    }
 
     @Test
     public void shouldReturnSucess_WhenRequestingAllRoms() {
