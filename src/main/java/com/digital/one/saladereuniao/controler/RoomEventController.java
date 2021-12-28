@@ -44,11 +44,11 @@ public class RoomEventController {
     }
 
     @GetMapping("/events{id}")
-    public ResponseEntity<RoomEvent> findById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<RoomEventDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
 
         RoomEvent event = eventService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Event id %s not found", id)));
-        return ResponseEntity.ok(event);
+        return ResponseEntity.ok(event.toDto());
     }
 
     @PostMapping("/events")
