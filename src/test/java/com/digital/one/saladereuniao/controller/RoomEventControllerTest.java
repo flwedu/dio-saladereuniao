@@ -74,7 +74,23 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnCreated_WhenSavingAnEvent() {
+    public void shouldReturnSucess_WhenRequestingARoomById() throws ResourceNotFoundException {
+
+        RoomEvent roomEvent = RoomEventFaker.createFakeEvent(1L);
+
+        doReturn(Optional.of(roomEvent)).when(eventService).findById(anyLong());
+
+        try {
+            String resultContent = mapper.writeValueAsString(roomEvent.toDto());
+            mockMvc.perform(get(baseUrl + "1")).andExpect(status().isOk()).andExpect(content().string(resultContent));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void shouldReturnCreated_WhenSavingAnEvent() throws ResourceNotFoundException {
 
         Long roomEventId = 1L;
 
