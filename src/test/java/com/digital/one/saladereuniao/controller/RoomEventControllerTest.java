@@ -64,12 +64,13 @@ public class RoomEventControllerTest {
     public void shouldReturnSucess_WhenRequestingAllRoms() {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
-        when(eventService.findAll(any(Pageable.class))).thenReturn(responsePage);
+        doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
 
         try {
             mockMvc.perform(get(baseUrl + "?page=0")).andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
     }
 
