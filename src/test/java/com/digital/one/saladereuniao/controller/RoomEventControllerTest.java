@@ -91,6 +91,19 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    public void shouldReturnError_WhenRequestingAInvalidRoomById() {
+
+        doReturn(Optional.empty()).when(eventService).findById(anyLong());
+
+        try {
+            mockMvc.perform(get(baseUrl + "1")).andExpect(status().isNotFound());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
     public void shouldReturnCreated_WhenSavingAnEvent() throws ResourceNotFoundException {
 
         Long roomEventId = 1L;
