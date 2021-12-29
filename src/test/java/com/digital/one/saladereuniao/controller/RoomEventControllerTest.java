@@ -75,7 +75,21 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnSucess_WhenRequestingARoomById() throws ResourceNotFoundException {
+    public void shouldReturnSucess_WhenRequestingAllRomsEventsWithoutPagePathVariable() {
+
+        Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
+        doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
+
+        try {
+            mockMvc.perform(get(baseUrl)).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void shouldReturnSucess_WhenRequestingARoomEventById() throws ResourceNotFoundException {
 
         RoomEvent roomEvent = RoomEventFaker.createFakeEvent(1L);
 
