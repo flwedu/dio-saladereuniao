@@ -104,6 +104,17 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() {
+
+        try {
+            mockMvc.perform(get(baseUrl + "a")).andExpect(status().isBadRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
     public void shouldReturnCreated_WhenSavingAnEvent() throws ResourceNotFoundException {
 
         Long roomEventId = 1L;
