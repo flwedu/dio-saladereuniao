@@ -1,9 +1,10 @@
 package com.digital.one.saladereuniao.controller;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -11,9 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
 import com.digital.one.saladereuniao.controler.RoomEventController;
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
+import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -30,6 +34,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -61,7 +66,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnSucess_WhenRequestingAllRoms() {
+    public void shouldReturnSucess_WhenRequestingAllRomsEvents() {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
@@ -75,7 +80,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnSucess_WhenRequestingAllRomsEventsWithoutPagePathVariable() {
+    public void shouldReturnSucess_WhenRequestingResourcesWithoutPagePathVariable() {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
@@ -105,7 +110,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnError_WhenRequestingAInvalidRoomById() {
+    public void shouldReturnError_WhenRequestingResourceById() {
 
         doReturn(Optional.empty()).when(eventService).findById(anyLong());
 
@@ -129,18 +134,35 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnCreated_WhenSavingAnEvent() throws ResourceNotFoundException {
+    public void shouldReturnCreated_WhenSavingAnResource() throws ResourceNotFoundException {
 
         Long roomEventId = 1L;
 
-        RoomEventDTO dto = RoomEventFaker.createFakeEvent(roomEventId).toDto();
-        when(eventService.save(any(RoomEvent.class))).thenReturn(dto.toEntity());
+        Room room = RoomFaker.createFakeRoom(1L);
+        RoomEvent roomEvent = RoomEventFaker.createFakeEvent(roomEventId);
+        RoomEventDTO dto = roomEvent.toDto();
+        dto.setRoomId(1L);
 
+        doReturn(room).when(roomService).findRoomByIdOrThrowNotFoundException(anyLong());
+        doReturn(roomEvent).when(eventService).save(any(RoomEvent.class));
+        doReturn(room).when(roomService).save(any(Room.class));
+
+        String dtoInJson = "";
         try {
-            mockMvc.perform(post("api/v1/events")).andExpect(status().isOk())
-                    .andExpect(content().string(contains(dto.toString())));
+            dtoInJson = mapper.writeValueAsString(dto);
+        } catch (JsonProcessingException e1) {
+            e1.printStackTrace();
+            fail("Fail when converting object to JSON");
+        }
+        try {
+            mockMvc.perform(post(baseUrl)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(dtoInJson)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
     }
 
