@@ -21,8 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping(path = "api/v1", consumes = "application/json", produces = "application/json")
+@Api(value = "RoomEvent")
 public class RoomEventController {
 
     private RoomEventService eventService;
@@ -36,6 +40,7 @@ public class RoomEventController {
     }
 
     @GetMapping("/events")
+    @ApiOperation(value = "Show all room events by page number")
     public ResponseEntity<Page<RoomEventDTO>> getAllEvents(@RequestParam(defaultValue = "0") Integer page) {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
@@ -43,7 +48,8 @@ public class RoomEventController {
         return ResponseEntity.ok().body(events.map(RoomEvent::toDto));
     }
 
-    @GetMapping("/events{id}")
+    @GetMapping("/events/{id}")
+    @ApiOperation(value = "Show a room event with the specified Id")
     public ResponseEntity<RoomEventDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
 
         RoomEvent event = eventService.findById(id)
@@ -52,6 +58,7 @@ public class RoomEventController {
     }
 
     @PostMapping("/events")
+    @ApiOperation(value = "Create a room Event with data in Request Body")
     public ResponseEntity<RoomEventDTO> save(@Valid @RequestBody RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
