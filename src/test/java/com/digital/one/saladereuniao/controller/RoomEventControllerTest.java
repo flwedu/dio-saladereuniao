@@ -151,8 +151,8 @@ public class RoomEventControllerTest {
 
         Room room = RoomFaker.createFakeRoom(1L);
         RoomEvent roomEvent = RoomEventFaker.createFakeEvent(roomEventId);
-        RoomEventDTO dto = roomEvent.toDto();
-        dto.setRoomId(1L);
+        RoomEventDTO roomEventDTO = roomEvent.toDto();
+        roomEventDTO.setRoomId(1L);
 
         doReturn(room).when(roomService).findRoomByIdOrThrowNotFoundException(anyLong());
         doReturn(roomEvent).when(eventService).save(any(RoomEvent.class));
@@ -161,7 +161,8 @@ public class RoomEventControllerTest {
         try {
             mockMvc.perform(
                     MockMvcRequestBuilders.post(baseUrl)
-                            .content(asJsonString(dto))
+                            .content(asJsonString(
+                                    roomEventDTO))
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
