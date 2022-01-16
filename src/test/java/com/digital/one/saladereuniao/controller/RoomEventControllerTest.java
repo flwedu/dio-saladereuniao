@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +69,8 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    public void shouldReturnSucess_WhenRequestingAllRomsEvents() {
+    @Description("Should return Sucess when requesting all roomEvents with page number in pathVariable")
+    public void shouldReturnSucess_WhenRequestingAllRoomsEvents() {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
@@ -82,6 +84,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    @Description("Should return Sucess when requesting all roomEvents without page number in pathVariable")
     public void shouldReturnSucess_WhenRequestingResourcesWithoutPagePathVariable() {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
@@ -96,6 +99,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    @Description("Should return Sucess when requesting a roomEvent by Id")
     public void shouldReturnSucess_WhenRequestingARoomEventById() throws ResourceNotFoundException {
 
         RoomEvent roomEvent = RoomEventFaker.createFakeEvent(1L);
@@ -114,6 +118,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    @Description("Should return Error when requesting an unexisting roomEvent by Id")
     public void shouldReturnError_WhenRequestingResourceById() {
 
         doReturn(Optional.empty()).when(eventService).findById(anyLong());
@@ -127,6 +132,7 @@ public class RoomEventControllerTest {
     }
 
     @Test
+    @Description("Should return BadRequest when requesting with an invalid URL")
     public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() {
 
         try {
