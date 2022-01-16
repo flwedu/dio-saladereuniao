@@ -164,17 +164,19 @@ public class RoomEventControllerTest {
                             .content(asJsonString(dto))
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isOk())
+                    .andDo(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Fail when performing mvc POST");
         }
     }
 
-    public static String asJsonString(final Object obj) {
+    public static String asJsonString(Object obj) {
         try {
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
