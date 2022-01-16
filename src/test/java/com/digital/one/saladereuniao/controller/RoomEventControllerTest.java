@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
-import com.digital.one.saladereuniao.controler.RoomEventController;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;

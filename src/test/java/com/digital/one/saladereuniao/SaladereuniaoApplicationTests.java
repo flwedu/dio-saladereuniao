@@ -1,7 +1,7 @@
 package com.digital.one.saladereuniao;
 
-import com.digital.one.saladereuniao.controler.RoomController;
-import com.digital.one.saladereuniao.controler.RoomEventController;
+import com.digital.one.saladereuniao.controller.RoomController;
+import com.digital.one.saladereuniao.controller.RoomEventController;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

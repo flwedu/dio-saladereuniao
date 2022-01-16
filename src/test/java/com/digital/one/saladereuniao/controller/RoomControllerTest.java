@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import java.util.List;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
-import com.digital.one.saladereuniao.controler.RoomController;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;

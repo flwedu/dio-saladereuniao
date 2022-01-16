@@ -1,4 +1,4 @@
-package com.digital.one.saladereuniao.controler;
+package com.digital.one.saladereuniao.controller;
 
 import javax.validation.Valid;
 
