@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,6 +36,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 /**
  * Testing with a diferent approach of RoomControllerTest.
@@ -73,7 +73,7 @@ public class RoomEventControllerTest {
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
 
         try {
-            mockMvc.perform(get(baseUrl + "?page=0")).andExpect(status().isOk());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "?page=0")).andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -87,7 +87,7 @@ public class RoomEventControllerTest {
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
 
         try {
-            mockMvc.perform(get(baseUrl)).andExpect(status().isOk());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl)).andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -103,7 +103,9 @@ public class RoomEventControllerTest {
 
         try {
             String resultContent = mapper.writeValueAsString(roomEvent.toDto());
-            mockMvc.perform(get(baseUrl + "1")).andExpect(status().isOk()).andExpect(content().string(resultContent));
+            mockMvc.perform(
+                    MockMvcRequestBuilders.get(baseUrl + "1")).andExpect(status().isOk())
+                    .andExpect(content().string(resultContent));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -116,7 +118,7 @@ public class RoomEventControllerTest {
         doReturn(Optional.empty()).when(eventService).findById(anyLong());
 
         try {
-            mockMvc.perform(get(baseUrl + "1")).andExpect(status().isNotFound());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "1")).andExpect(status().isNotFound());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -127,7 +129,7 @@ public class RoomEventControllerTest {
     public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() {
 
         try {
-            mockMvc.perform(get(baseUrl + "a")).andExpect(status().isBadRequest());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "a")).andExpect(status().isBadRequest());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
