@@ -56,11 +56,13 @@ public class RoomEventControllerTest {
     @MockBean
     private RoomService roomService;
 
+    // This object has the resposibility to convert objects to JSON string format
     static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
     static void setup() {
 
+        // configuring the datetime format of JSON output string
         mapper.findAndRegisterModules();
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
     }
