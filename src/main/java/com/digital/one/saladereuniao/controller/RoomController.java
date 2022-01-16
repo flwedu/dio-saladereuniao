@@ -30,11 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("api/v1/rooms")
+@RequestMapping(path = "api/v1/rooms", consumes = "application/json", produces = "application/json")
 @Api(value = "Room")
 public class RoomController {
 
@@ -51,25 +49,15 @@ public class RoomController {
         return ResponseEntity.ok(roomService.findAll().stream().map(Room::toDTO).collect(Collectors.toList()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     @ApiOperation(value = "Show a room with the specified Id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resource with Id finded"),
-            @ApiResponse(code = 404, message = "Resource with Id not found"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) throws ResourceNotFoundException {
         Room room = roomService.findRoomByIdOrThrowNotFoundException(id);
         return ResponseEntity.ok(room.toDTO());
     }
 
-    @GetMapping("/{id}/events")
+    @GetMapping(path = "/{id}/events")
     @ApiOperation(value = "Show all events of the room with the specified Id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resource with Id finded"),
-            @ApiResponse(code = 404, message = "Resource with Id not found"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
     public ResponseEntity<Page<RoomEventDTO>> getEventsByRoomById(@PathVariable Long id,
             @RequestParam(defaultValue = "0") Integer page) throws ResourceNotFoundException {
 
@@ -84,21 +72,12 @@ public class RoomController {
 
     @PostMapping()
     @ApiOperation(value = "Create a room with the data in Request Body")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resource created"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
     public ResponseEntity<RoomDTO> createRoom(@Valid @RequestBody RoomDTO room) {
         Room savedRoom = roomService.save(room.toEntity());
         return ResponseEntity.ok(savedRoom.toDTO());
     }
 
-    @PutMapping("/{id}")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resource updated"),
-            @ApiResponse(code = 404, message = "Resource with Id not found"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
+    @PutMapping(path = "/{id}")
     @ApiOperation(value = "Updates a room with Id in URL with the data in Request Body")
     public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO newRoomData)
             throws ResourceNotFoundException {
@@ -111,11 +90,6 @@ public class RoomController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Deletes a Room with specified Id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "Operation accepted"),
-            @ApiResponse(code = 404, message = "Resource with Id not found"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
     public ResponseEntity<?> deleteRoomById(@PathVariable Long id) throws ResourceNotFoundException {
         roomService.findRoomByIdOrThrowNotFoundException(id);
         roomService.deleteById(id);
