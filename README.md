@@ -14,22 +14,12 @@ Foi criado com o intuito de demonstrar o desenvolvimento de uma aplicação para
 
 ## Tecnologias utilizadas 🔧
 
-### Back-End
-
 - Java 11
 - Spring
 - H2 Database Engine
 - Lombok
 - Gradle
-
-### Front-End
-
-- Angular 12
-- Typescript
-- HTML
-- CSS
-- Bootstrap 5
-- Material Icons
+- Swagger
 
 ## Rodando a aplicação 🚀
 
@@ -56,43 +46,20 @@ se encarregará da inicialização.
 
 ## Requisições aceitas
 
-Lista de requisições possíveis e suas respostas:
-
-- `GET` para `/api/v1/rooms` : Lista de todas as salas disponíveis;
-- `GET` para `/api/v1/rooms/{id}` : Informações sobre a sala com o `{id}`. Exemplo de retorno obtido:
-
-```JSON
-{
-  "id": 1,
-  "name": "Sala 1",
-  "date": "09/08/2021",
-  "startHour": "12:00",
-  "endHour": "18:00"
-}
-```
-
-- `POST` para `/api/v1/rooms`: Salva os dados. Formato de dados aceito:
-
-```JSON
-{
-	"name": "Sala 2",
-	"date": "09/08/2021",
-	"startHour": "12:00",
-	"endHour": "18:00"
-}
-```
-
-- `PUT`para `/api/v1/rooms/{id}`: Atualiza a sala requisitada com os dados no _request body_.
-- `DELETE`para `/api/v1/rooms/{id}`: Deleta uma sala com o mesmo `{id}`.
+Uma vez inicializada a aplicação, a documentação de cada um dos endpoints estará disponível em [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
 ## Recursos
 
-[ ✔ ] Listar todas as salas
+[x] Listar todas as salas
 
-[ ✔ ] Recuperar dados de sala individualmente
+[x] Recuperar dados de sala individualmente
 
-[ ✔ ] Salvar salas
+[x] Salvar salas
 
-[ ✔ ] Atualizar dados de salas.
+[x] Atualizar dados de salas.
 
-[ ✔ ] Deletar salas
+[x] Deletar salas
+
+[x] Adicionar evento à uma sala
+
+[x] Listar todos eventos de uma sala
