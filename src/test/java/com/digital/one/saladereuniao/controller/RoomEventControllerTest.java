@@ -22,7 +22,6 @@ import com.digital.one.saladereuniao.service.RoomEventService;
 import com.digital.one.saladereuniao.service.RoomService;
 import com.digital.one.saladereuniao.utils.RoomEventFaker;
 import com.digital.one.saladereuniao.utils.RoomFaker;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -151,22 +150,24 @@ public class RoomEventControllerTest {
         doReturn(roomEvent).when(eventService).save(any(RoomEvent.class));
         doReturn(room).when(roomService).save(any(Room.class));
 
-        String dtoInJson = "";
         try {
-            dtoInJson = mapper.writeValueAsString(dto);
-        } catch (JsonProcessingException e1) {
-            e1.printStackTrace();
-            fail("Fail when converting object to JSON");
-        }
-        try {
-            mockMvc.perform(post(baseUrl)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(dtoInJson)
-                    .accept(MediaType.APPLICATION_JSON))
+            mockMvc.perform(
+                    MockMvcRequestBuilders.post(baseUrl)
+                            .content(asJsonString(dto))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
-            fail();
+            fail("Fail when performing mvc POST");
+        }
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
