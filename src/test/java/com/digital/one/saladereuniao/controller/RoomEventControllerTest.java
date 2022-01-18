@@ -1,6 +1,5 @@
 package com.digital.one.saladereuniao.controller;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
-import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
@@ -35,6 +33,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * Testing with a diferent approach of RoomControllerTest.
@@ -67,83 +66,72 @@ public class RoomEventControllerTest {
     }
 
     @Test
-    @Description("Should return Sucess when requesting all roomEvents with page number in pathVariable")
-    public void shouldReturnSucess_WhenRequestingAllRoomsEvents() {
+    @Description("Should return Sucess when requesting all roomEvents with page number in pathVariable, and body contais a page")
+    public void shouldReturnSucess_WhenRequestingAllRoomsEvents() throws Exception {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "?page=0")).andExpect(status().isOk());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "?page=0"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.empty").value(responsePage.isEmpty()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(responsePage.getSize()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(responsePage.getTotalPages()));
+
     }
 
     @Test
     @Description("Should return Sucess when requesting all roomEvents without page number in pathVariable")
-    public void shouldReturnSucess_WhenRequestingResourcesWithoutPagePathVariable() {
+    public void shouldReturnSucess_WhenRequestingResourcesWithoutPagePathVariable() throws Exception {
 
         Page<RoomEvent> responsePage = new PageImpl<>(List.of(mock(RoomEvent.class)));
         doReturn(responsePage).when(eventService).findAll(any(Pageable.class));
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl)).andExpect(status().isOk());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.empty").value(responsePage.isEmpty()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(responsePage.getSize()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(responsePage.getTotalPages()));
+
     }
 
     @Test
-    @Description("Should return Sucess when requesting a roomEvent by Id")
-    public void shouldReturnSucess_WhenRequestingARoomEventById() throws ResourceNotFoundException {
+    @Description("Should return Sucess when requesting a roomEvent by Id, and body contains a roomEvent")
+    public void shouldReturnSucess_WhenRequestingARoomEventById() throws Exception {
 
         RoomEvent roomEvent = RoomEventFaker.createFakeEvent(1L);
 
         doReturn(Optional.of(roomEvent)).when(eventService).findById(anyLong());
 
-        try {
-            String resultContent = mapper.writeValueAsString(roomEvent.toDto());
-            mockMvc.perform(
-                    MockMvcRequestBuilders.get(baseUrl + "/1")).andExpect(status().isOk())
-                    .andExpect(content().string(resultContent));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        String expectedResultContent = mapper.writeValueAsString(roomEvent.toDto());
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(baseUrl + "/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(expectedResultContent));
     }
 
     @Test
     @Description("Should return Error when requesting an unexisting roomEvent by Id")
-    public void shouldReturnError_WhenRequestingResourceById() {
+    public void shouldReturnError_WhenRequestingResourceById() throws Exception {
 
         doReturn(Optional.empty()).when(eventService).findById(anyLong());
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/1")).andExpect(status().isNotFound());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/1")).andExpect(status().isNotFound());
     }
 
     @Test
     @Description("Should return BadRequest when requesting with an invalid URL")
-    public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() {
+    public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() throws Exception {
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/iwue0921")).andExpect(status().isBadRequest());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/iwue0921")).andExpect(status().isBadRequest());
+
     }
 
     @Disabled("Disabled until discover the cause of test failure (framework)")
     @Test
-    public void shouldReturnCreated_WhenSavingAnResource() throws ResourceNotFoundException {
+    public void shouldReturnCreated_WhenSavingAnResource() throws Exception {
 
         Long roomEventId = 1L;
 
@@ -156,19 +144,14 @@ public class RoomEventControllerTest {
         doReturn(roomEvent).when(eventService).save(any(RoomEvent.class));
         doReturn(room).when(roomService).save(any(Room.class));
 
-        try {
-            mockMvc.perform(
-                    MockMvcRequestBuilders.post(baseUrl)
-                            .content(asJsonString(
-                                    roomEventDTO))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(System.out::println);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Fail when performing mvc POST");
-        }
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(baseUrl)
+                        .content(asJsonString(
+                                roomEventDTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
     }
 
     public static String asJsonString(Object obj) {
