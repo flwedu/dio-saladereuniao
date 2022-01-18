@@ -82,7 +82,7 @@ public class RoomControllerTest {
         }
 
         @Test
-        @DisplayName("Should return Sucess (200) HTTP status code when creating a room and the response body contais the room DTO")
+        @DisplayName("Should return Created (201) when saving a room")
         public void shouldReturnCreated_WhenCreatingARoom() {
 
                 Room room = RoomFaker.createFakeRoom(1L);
@@ -96,7 +96,7 @@ public class RoomControllerTest {
                                 .when()
                                 .post("/api/v1/rooms/")
                                 .then()
-                                .statusCode(HttpStatus.OK.value());
+                                .statusCode(HttpStatus.CREATED.value());
         }
 
         @ParameterizedTest
