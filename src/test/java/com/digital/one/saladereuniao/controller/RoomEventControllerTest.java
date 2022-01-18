@@ -107,7 +107,7 @@ public class RoomEventControllerTest {
         try {
             String resultContent = mapper.writeValueAsString(roomEvent.toDto());
             mockMvc.perform(
-                    MockMvcRequestBuilders.get(baseUrl + "1")).andExpect(status().isOk())
+                    MockMvcRequestBuilders.get(baseUrl + "/1")).andExpect(status().isOk())
                     .andExpect(content().string(resultContent));
         } catch (Exception e) {
             e.printStackTrace();
