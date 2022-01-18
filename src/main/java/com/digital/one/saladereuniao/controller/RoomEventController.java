@@ -1,10 +1,11 @@
 package com.digital.one.saladereuniao.controller;
 
+import java.net.URI;
+
 import javax.validation.Valid;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
-import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,19 +61,17 @@ public class RoomEventController {
 
     @PostMapping("/events")
     @ApiOperation(value = "Create a room Event with data in Request Body")
-    public ResponseEntity<RoomEventDTO> save(@Valid @RequestBody RoomEventDTO newEvent)
+    public ResponseEntity<String> save(UriComponentsBuilder uriBuilder, @Valid @RequestBody RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
-        Room findRoom = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
+        roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
         RoomEvent eventToSave = newEvent.toEntity();
 
-        findRoom.getEvents().add(eventToSave);
-        eventToSave.setRoom(findRoom);
-
         RoomEvent savedEvent = eventService.save(eventToSave);
-        roomService.save(findRoom);
 
-        return ResponseEntity.ok().body(savedEvent.toDto());
+        URI uri = uriBuilder.path("api/v1/events/{id}").buildAndExpand(savedEvent.getId().toString()).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
 }
