@@ -66,10 +66,12 @@ public class RoomController {
         Room room = roomService.findRoomByIdOrThrowNotFoundException(id);
 
         PageRequest pageConfig = PageRequest.of(page, 10);
+        List<RoomEvent> events = room.getEvents();
+        List<RoomEventDTO> eventDTOs = events.stream().map(RoomEvent::toDto).collect(Collectors.toList());
 
-        Page<RoomEvent> eventsByRoomid = new PageImpl<>(room.getEvents(), pageConfig, room.getEvents().size());
+        Page<RoomEventDTO> eventsByRoomid = new PageImpl<>(eventDTOs, pageConfig, room.getEvents().size());
 
-        return ResponseEntity.ok(eventsByRoomid.map(RoomEvent::toDto));
+        return ResponseEntity.ok(eventsByRoomid);
     }
 
     @PostMapping()
