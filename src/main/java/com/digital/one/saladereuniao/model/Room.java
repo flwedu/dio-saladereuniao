@@ -3,6 +3,7 @@ package com.digital.one.saladereuniao.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,8 +36,7 @@ public class Room implements Serializable {
 
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @Column(name = "events")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomEvent> events;
 
     public RoomDTO toDTO() {
