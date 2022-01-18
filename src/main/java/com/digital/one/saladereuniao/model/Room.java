@@ -36,7 +36,7 @@ public class Room implements Serializable {
 
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomEvent> events;
 
     public RoomDTO toDTO() {
