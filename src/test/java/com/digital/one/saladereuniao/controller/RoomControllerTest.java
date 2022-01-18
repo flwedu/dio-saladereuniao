@@ -1,5 +1,6 @@
 package com.digital.one.saladereuniao.controller;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -13,6 +14,7 @@ import com.digital.one.saladereuniao.service.RoomService;
 import com.digital.one.saladereuniao.utils.RoomEventFaker;
 import com.digital.one.saladereuniao.utils.RoomFaker;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,13 +62,19 @@ public class RoomControllerTest {
         @DisplayName("Should return Sucess (200) HTTP status code when searched for all rooms list")
         public void shouldReturnSucess_WhenSearchedForAllRoomsList() {
 
-                List<Room> list = List.of(RoomFaker.createFakeRoom(1L));
+                Room room = RoomFaker.createFakeRoom(1L);
+                room.setEvents(null);
+                List<Room> list = List.of(room);
 
                 Mockito.when(roomService.findAll()).thenReturn(list);
 
-                RestAssuredMockMvc.given().accept(ContentType.JSON).when().get("/api/v1/rooms/").then()
-                                .statusCode(HttpStatus.OK.value());
+                Room[] responseArray = RestAssuredMockMvc.given().accept(ContentType.JSON).when().get("/api/v1/rooms/")
+                                .then()
+                                .statusCode(HttpStatus.OK.value())
+                                .extract()
+                                .as(Room[].class);
 
+                assertArrayEquals(responseArray, list.toArray());
         }
 
         @Test
