@@ -32,7 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(path = "api/v1/rooms", consumes = "application/json", produces = "application/json")
+@RequestMapping(path = "api/v1/rooms")
 @Api(value = "Room")
 public class RoomController {
 
