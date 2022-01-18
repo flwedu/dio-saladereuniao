@@ -12,7 +12,7 @@ public class RoomFaker {
     }
 
     public static RoomDTO createFakeRoomDto(Long id) {
-        return new RoomDTO(id, "Room 1", "An test room", null);
+        return new RoomDTO(id, "Room 1", "An test room");
     }
 
 }
