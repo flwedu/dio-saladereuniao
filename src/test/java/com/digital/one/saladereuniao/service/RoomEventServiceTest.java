@@ -1,16 +1,24 @@
 package com.digital.one.saladereuniao.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Optional;
 
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.repository.RoomEventRepository;
 import com.digital.one.saladereuniao.utils.RoomEventFaker;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +52,7 @@ public class RoomEventServiceTest {
     }
 
     @Test
-    public void shouldSaveAnEvent() {
+    public void shouldSaveAnEvent() throws ResourceNotFoundException {
 
         RoomEvent event = RoomEventFaker.createFakeEvent(1L);
         when(repository.save(any(RoomEvent.class))).thenReturn(event);
