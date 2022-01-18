@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
+import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.service.RoomEventService;
 import com.digital.one.saladereuniao.service.RoomService;
@@ -56,6 +57,7 @@ public class RoomEventController {
 
         RoomEvent event = eventService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Event id %s not found", id)));
+
         return ResponseEntity.ok(event.toDto());
     }
 
@@ -64,8 +66,9 @@ public class RoomEventController {
     public ResponseEntity<String> save(UriComponentsBuilder uriBuilder, @Valid @RequestBody RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
-        roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
+        Room room = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
         RoomEvent eventToSave = newEvent.toEntity();
+        eventToSave.setRoom(room);
 
         RoomEvent savedEvent = eventService.save(eventToSave);
 
