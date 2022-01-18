@@ -1,5 +1,6 @@
 package com.digital.one.saladereuniao.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -72,9 +74,13 @@ public class RoomController {
 
     @PostMapping()
     @ApiOperation(value = "Create a room with the data in Request Body")
-    public ResponseEntity<RoomDTO> createRoom(@Valid @RequestBody RoomDTO room) {
+    public ResponseEntity<String> createRoom(UriComponentsBuilder uriComponentsBuilder,
+            @Valid @RequestBody RoomDTO room) {
         Room savedRoom = roomService.save(room.toEntity());
-        return ResponseEntity.ok(savedRoom.toDTO());
+
+        URI uri = uriComponentsBuilder.path("api/v1/rooms/").path(savedRoom.getId().toString()).build().toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(path = "/{id}")
