@@ -1,5 +1,6 @@
 package com.digital.one.saladereuniao.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "rooms")
-public class Room {
+public class Room implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

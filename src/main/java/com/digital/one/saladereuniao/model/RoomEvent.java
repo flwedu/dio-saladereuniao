@@ -1,5 +1,6 @@
 package com.digital.one.saladereuniao.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "roomevents")
-public class RoomEvent {
+public class RoomEvent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
