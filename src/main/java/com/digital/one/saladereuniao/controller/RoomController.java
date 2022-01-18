@@ -78,7 +78,7 @@ public class RoomController {
             @Valid @RequestBody RoomDTO room) {
         Room savedRoom = roomService.save(room.toEntity());
 
-        URI uri = uriComponentsBuilder.path("api/v1/rooms/").path(savedRoom.getId().toString()).build().toUri();
+        URI uri = uriComponentsBuilder.path("api/v1/rooms/{id}").buildAndExpand(savedRoom.getId().toString()).toUri();
 
         return ResponseEntity.created(uri).build();
     }

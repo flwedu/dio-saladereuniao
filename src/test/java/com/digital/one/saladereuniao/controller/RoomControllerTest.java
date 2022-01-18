@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 
 @SpringBootTest
 public class RoomControllerTest {
@@ -90,21 +91,31 @@ public class RoomControllerTest {
         }
 
         @Test
-        @DisplayName("Should return Created (201) when saving a room")
+        @DisplayName("Should return Created (201) when saving a room and location header is not null")
         public void shouldReturnCreated_WhenCreatingARoom() {
 
                 Room room = RoomFaker.createFakeRoom(1L);
                 Mockito.when(roomService.save(Mockito.any())).thenReturn(room);
 
-                RestAssuredMockMvc
-                                .given()
-                                .accept(ContentType.JSON)
+                MockMvcResponse response = RestAssuredMockMvc.given()
                                 .contentType(ContentType.JSON)
-                                .body(room)
-                                .when()
-                                .post("/api/v1/rooms/")
-                                .then()
-                                .statusCode(HttpStatus.CREATED.value());
+                                .accept(ContentType.JSON)
+                                .body(room.toDTO())
+                                .post("/api/v1/rooms/");
+
+                Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+                Assertions.assertNotNull(response.getHeader("location"));
+        }
+
+        @Test
+        @DisplayName("Should return BadRequest (400) when saving a room without body")
+        public void shouldReturnBadRequest_WhenCreatingARoomWithoutBody() {
+
+                Room room = RoomFaker.createFakeRoom(1L);
+                Mockito.when(roomService.save(Mockito.any())).thenReturn(room);
+
+                MockMvcResponse response = RestAssuredMockMvc.post("/api/v1/rooms/");
+                Assertions.assertEquals(response.statusCode(), HttpStatus.BAD_REQUEST.value());
         }
 
         @ParameterizedTest
