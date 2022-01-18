@@ -122,7 +122,7 @@ public class RoomEventControllerTest {
         doReturn(Optional.empty()).when(eventService).findById(anyLong());
 
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "1")).andExpect(status().isNotFound());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/1")).andExpect(status().isNotFound());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -134,7 +134,7 @@ public class RoomEventControllerTest {
     public void shouldReturnBadRequest_WhenRequestingWithInvalidUrl() {
 
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "a")).andExpect(status().isBadRequest());
+            mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/iwue0921")).andExpect(status().isBadRequest());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
