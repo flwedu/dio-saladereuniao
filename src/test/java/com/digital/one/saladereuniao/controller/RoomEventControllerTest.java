@@ -21,7 +21,6 @@ import com.digital.one.saladereuniao.utils.RoomFaker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -129,8 +128,8 @@ public class RoomEventControllerTest {
 
     }
 
-    @Disabled("Disabled until discover the cause of test failure (framework)")
     @Test
+    @Description("Should return Created when saving a room, and header contains the location of created resource")
     public void shouldReturnCreated_WhenSavingAnResource() throws Exception {
 
         Long roomEventId = 1L;
@@ -150,7 +149,9 @@ public class RoomEventControllerTest {
                                 roomEventDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated())
+                .andExpect(
+                        MockMvcResultMatchers.header().exists("location"));
 
     }
 
