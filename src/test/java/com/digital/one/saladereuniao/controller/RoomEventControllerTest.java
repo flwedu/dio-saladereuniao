@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -153,6 +154,32 @@ public class RoomEventControllerTest {
                 .andExpect(
                         MockMvcResultMatchers.header().exists("location"));
 
+    }
+
+    @Test
+    @Description("Should return BadRequest when POST with an empty body")
+    public void shouldReturnBadRequest_WhenPOSTwithEmptyBody() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(baseUrl)
+                        .content("")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Description("Should return BadRequest when POST with an invalid body")
+    public void shouldReturnBadRequest_WhenPOSTwithInvalidBody() throws Exception {
+
+        RoomEventDTO dto = new RoomEventDTO(1L, "", "", null, LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(baseUrl)
+                        .content(asJsonString(dto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     public static String asJsonString(Object obj) {
