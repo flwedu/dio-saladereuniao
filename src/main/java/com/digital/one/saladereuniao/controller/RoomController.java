@@ -48,7 +48,8 @@ public class RoomController {
     @GetMapping()
     @ApiOperation(value = "Show all rooms")
     public ResponseEntity<List<RoomDTO>> getAllRooms() {
-        return ResponseEntity.ok(roomService.findAll().stream().map(Room::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok()
+                .body(roomService.findAll().stream().map(Room::toDTO).collect(Collectors.toList()));
     }
 
     @GetMapping(path = "/{id}")
