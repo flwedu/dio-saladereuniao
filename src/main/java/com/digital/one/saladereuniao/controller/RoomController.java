@@ -34,8 +34,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@CrossOrigin
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
 @RequestMapping(path = "api/v1/rooms")
 @Api(value = "Room")
 public class RoomController {
