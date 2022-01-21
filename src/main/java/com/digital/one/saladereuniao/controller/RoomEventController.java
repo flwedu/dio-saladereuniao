@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "api/v1")
+@RequestMapping(path = "api/v1/events")
 @Api(value = "RoomEvent")
 public class RoomEventController {
 
@@ -44,7 +44,7 @@ public class RoomEventController {
         this.roomService = roomService;
     }
 
-    @GetMapping("/events")
+    @GetMapping()
     @ApiOperation(value = "Show all room events by page number")
     public ResponseEntity<Page<RoomEventDTO>> getAllEvents(@RequestParam(defaultValue = "0") Integer page) {
 
@@ -53,7 +53,7 @@ public class RoomEventController {
         return ResponseEntity.ok().body(events.map(RoomEvent::toDto));
     }
 
-    @GetMapping("/events/{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "Show a room event with the specified Id")
     public ResponseEntity<RoomEventDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
 
@@ -63,9 +63,10 @@ public class RoomEventController {
         return ResponseEntity.ok(event.toDto());
     }
 
-    @PostMapping("/events")
+    @PostMapping()
     @ApiOperation(value = "Create a room Event with data in Request Body")
-    public ResponseEntity<String> save(UriComponentsBuilder uriBuilder, @Valid @RequestBody RoomEventDTO newEvent)
+    public ResponseEntity<String> save(UriComponentsBuilder uriBuilder,
+            @Valid @RequestBody RoomEventDTO newEvent)
             throws ResourceNotFoundException {
 
         Room room = roomService.findRoomByIdOrThrowNotFoundException(newEvent.getRoomId());
