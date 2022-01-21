@@ -14,11 +14,13 @@ import com.digital.one.saladereuniao.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -78,6 +80,17 @@ public class RoomEventController {
         URI uri = uriBuilder.path("api/v1/events/{id}").buildAndExpand(savedEvent.getId().toString()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(path = "/{id}")
+    @ApiOperation(value = "Updates a room with Id in URL with the data in Request Body")
+    public ResponseEntity<RoomEventDTO> updateRoom(@PathVariable Long id,
+            @Valid @RequestBody RoomEventDTO newRoomEventData)
+            throws ResourceNotFoundException {
+        eventService.findRoomEventByIdOrThrowNotFoundException(id);
+        RoomEvent updatedEvent = eventService.save(newRoomEventData.toEntity());
+        return new ResponseEntity<RoomEventDTO>(updatedEvent.toDto(), HttpStatus.ACCEPTED);
+
     }
 
 }
