@@ -2,6 +2,7 @@ package com.digital.one.saladereuniao.service;
 
 import java.util.Optional;
 
+import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.RoomEvent;
 import com.digital.one.saladereuniao.repository.RoomEventRepository;
 
@@ -34,6 +35,11 @@ public class RoomEventService {
 
     public void delete(Long id) {
         roomEventRepository.deleteById(id);
+    }
+
+    public RoomEvent findRoomEventByIdOrThrowNotFoundException(Long id) throws ResourceNotFoundException {
+        return roomEventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event " + id + " not found"));
     }
 
 }
