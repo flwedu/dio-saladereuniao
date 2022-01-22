@@ -95,13 +95,13 @@ public class RoomController {
         roomService.findRoomByIdOrThrowNotFoundException(id);
         newRoomData.setId(id);
         Room updatedRoom = roomService.save(newRoomData.toEntity());
-        return new ResponseEntity<RoomDTO>(updatedRoom.toDTO(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(updatedRoom.toDTO(), HttpStatus.ACCEPTED);
 
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Deletes a Room with specified Id")
-    public ResponseEntity<?> deleteRoomById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteRoomById(@PathVariable Long id) throws ResourceNotFoundException {
         roomService.findRoomByIdOrThrowNotFoundException(id);
         roomService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
