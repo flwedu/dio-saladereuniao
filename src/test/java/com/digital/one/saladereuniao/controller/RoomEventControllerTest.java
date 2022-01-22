@@ -182,6 +182,22 @@ public class RoomEventControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @Description("Should return Accepted when updating a RoomEvent with valid RequestBody")
+    public void shouldReturnAccepted_WhenUpdating() throws Exception {
+
+        RoomEvent fakeEvent = RoomEventFaker.createFakeEvent(1L);
+        doReturn(fakeEvent).when(eventService).findRoomEventByIdOrThrowNotFoundException(anyLong());
+        doReturn(fakeEvent).when(eventService).save(any(RoomEvent.class));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(baseUrl + "/1")
+                        .content(asJsonString(fakeEvent.toDto()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
+    }
+
     public static String asJsonString(Object obj) {
         try {
             return mapper.writeValueAsString(obj);
