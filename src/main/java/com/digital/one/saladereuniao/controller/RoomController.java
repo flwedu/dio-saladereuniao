@@ -2,12 +2,14 @@ package com.digital.one.saladereuniao.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.DTO.RoomEventDTO;
+import com.digital.one.saladereuniao.exception.BusinessRuleException;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.one.saladereuniao.model.Room;
 import com.digital.one.saladereuniao.model.RoomEvent;
@@ -80,7 +82,15 @@ public class RoomController {
     @PostMapping()
     @ApiOperation(value = "Create a room with the data in Request Body")
     public ResponseEntity<String> createRoom(UriComponentsBuilder uriComponentsBuilder,
-            @Valid @RequestBody RoomDTO room) {
+            @Valid @RequestBody RoomDTO room) throws BusinessRuleException {
+
+        // Verifying if already exists a room with this Id
+        if (room.getId() != null) {
+            Optional<Room> roomWithSameId = roomService.findById(room.getId());
+            if (roomWithSameId.isPresent())
+                throw new BusinessRuleException("Already exists a room with id" + room.getId());
+        }
+
         Room savedRoom = roomService.save(room.toEntity());
 
         URI uri = uriComponentsBuilder.path("api/v1/rooms/{id}").buildAndExpand(savedRoom.getId().toString()).toUri();
