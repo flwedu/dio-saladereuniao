@@ -92,17 +92,20 @@ public class RoomControllerTest {
         }
 
         @Test
-        @DisplayName("Should return Created (201) when saving a room and location header is not null")
+        @DisplayName("Should return Created (201) when saving a room with no Id in body. And response location header is not null")
         public void shouldReturnCreated_WhenCreatingARoom() {
 
                 Room room = RoomFaker.createFakeRoom(1L);
                 Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
                 Mockito.when(roomService.save(Mockito.any())).thenReturn(room);
 
+                RoomDTO dto = room.toDTO();
+                dto.setId(null);
+
                 MockMvcResponse response = RestAssuredMockMvc.given()
                                 .contentType(ContentType.JSON)
                                 .accept(ContentType.JSON)
-                                .body(room.toDTO())
+                                .body(dto)
                                 .post("/api/v1/rooms/");
 
                 Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
