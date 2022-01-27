@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.digital.one.saladereuniao.DTO.RoomDTO;
 import com.digital.one.saladereuniao.exception.ResourceNotFoundException;
@@ -95,6 +96,7 @@ public class RoomControllerTest {
         public void shouldReturnCreated_WhenCreatingARoom() {
 
                 Room room = RoomFaker.createFakeRoom(1L);
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
                 Mockito.when(roomService.save(Mockito.any())).thenReturn(room);
 
                 MockMvcResponse response = RestAssuredMockMvc.given()
@@ -105,6 +107,20 @@ public class RoomControllerTest {
 
                 Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
                 Assertions.assertNotNull(response.getHeader("location"));
+        }
+
+        @Test
+        public void shouldReturnConflict_WhenSavingARoomWithRepeatedId() {
+
+                Room room = RoomFaker.createFakeRoom(1L);
+                Mockito.when(roomService.findById(Mockito.anyLong())).thenReturn(Optional.of(room));
+
+                MockMvcResponse response = RestAssuredMockMvc.given()
+                                .contentType(ContentType.JSON)
+                                .accept(ContentType.JSON)
+                                .body(room.toDTO()).post("/api/v1/rooms");
+
+                Assertions.assertEquals(HttpStatus.CONFLICT.value(), response.statusCode());
         }
 
         @Test
