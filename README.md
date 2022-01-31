@@ -5,10 +5,10 @@ Criado durante o **Santander Bootcamp | Fullstack Developer**, em parceria com a
 
 ## Informações 📢
 
-O projeto consiste em duas aplicações, separadas em dois repositórios.
+O projeto consiste em duas aplicações, separadas em dois repositórios. O projeto em Angular foi substituído por uma nova versão construída com Vue.js.
 
 - API Rest para o back-end (este repositório)
-- Aplicação Angular para o front-end, disponível em https://github.com/flwedu/client-sala-reuniao.
+- Nova aplicação front-end criada em Vue.js, disponível no repositório [saladereuniao-app](https://github.com/flwedu/saladereuniao-app)
 
 Foi criado com o intuito de demonstrar o desenvolvimento de uma aplicação para o cadastro e visualização de salas de reunião.
 
