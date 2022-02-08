@@ -87,7 +87,12 @@ public class RoomEventController {
     public ResponseEntity<RoomEventDTO> updateRoom(@PathVariable Long id,
             @Valid @RequestBody RoomEventDTO newRoomEventData)
             throws ResourceNotFoundException {
+        // Verify if the roomId is valid
+        roomService.findRoomByIdOrThrowNotFoundException(newRoomEventData.getRoomId());
+        
+        // Verify if id is valid
         eventService.findRoomEventByIdOrThrowNotFoundException(id);
+
         RoomEvent updatedEvent = eventService.save(newRoomEventData.toEntity());
         return new ResponseEntity<>(updatedEvent.toDto(), HttpStatus.ACCEPTED);
 
