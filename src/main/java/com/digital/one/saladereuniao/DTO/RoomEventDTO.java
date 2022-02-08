@@ -33,8 +33,10 @@ public class RoomEventDTO {
     @NotNull
     private Long roomId;
 
+    @NotNull
     private LocalDateTime startingTime;
 
+    @NotNull
     private LocalDateTime endingTime;
 
     public RoomEvent toEntity() {
