@@ -89,7 +89,7 @@ public class RoomEventController {
             throws ResourceNotFoundException {
         eventService.findRoomEventByIdOrThrowNotFoundException(id);
         RoomEvent updatedEvent = eventService.save(newRoomEventData.toEntity());
-        return new ResponseEntity<RoomEventDTO>(updatedEvent.toDto(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(updatedEvent.toDto(), HttpStatus.ACCEPTED);
 
     }
 
