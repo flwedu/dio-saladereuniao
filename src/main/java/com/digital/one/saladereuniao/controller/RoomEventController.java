@@ -88,13 +88,17 @@ public class RoomEventController {
             @Valid @RequestBody RoomEventDTO newRoomEventData)
             throws ResourceNotFoundException {
         // Verify if the roomId is valid
-        roomService.findRoomByIdOrThrowNotFoundException(newRoomEventData.getRoomId());
+        Room room = roomService.findRoomByIdOrThrowNotFoundException(newRoomEventData.getRoomId());
         
         // Verify if id is valid
         eventService.findRoomEventByIdOrThrowNotFoundException(id);
 
-        RoomEvent updatedEvent = eventService.save(newRoomEventData.toEntity());
-        return new ResponseEntity<>(updatedEvent.toDto(), HttpStatus.ACCEPTED);
+        RoomEvent roomEventEntityToSave = newRoomEventData.toEntity();
+        roomEventEntityToSave.setId(id);
+        roomEventEntityToSave.setRoom(room);
+
+        // Persisting the entity and returning a ResponseEntity
+        return new ResponseEntity<>(eventService.save(roomEventEntityToSave).toDto(), HttpStatus.ACCEPTED);
 
     }
 
