@@ -33,19 +33,17 @@ Foi criado com o intuito de demonstrar o desenvolvimento de uma aplicação para
 
 ## Rodando a aplicação 🚀
 
-Fazendo build e baixando dependências com gradle:
+Scripts para inicialização:
 
 ```bash
+# Gerando o build
 gradle build
-```
 
-Rodando a aplicação:
-
-```bash
+# Rodando a aplicação:
 gradle bootRun
 ```
 
-A API Rest irá rodar em `http://localhost:8080/api/v1`. Os dados serão persistidos em memória, através da H2 Database Engine.
+A API Rest estará disponível em `http://localhost:8080/api/v1`. Os dados serão persistidos em memória, através da H2 Database Engine.
 
 A aplicação possui um arquivo com um código SQL de inicialização e população da database localizado
 em `src/main/resources/data.sql`.
