@@ -3,6 +3,16 @@
 Projeto de um gerenciador de salas de reunião utilizando Spring + Angular.
 Criado durante o **Santander Bootcamp | Fullstack Developer**, em parceria com a [Digital Innovation One](https://web.digitalinnovation.one/) em 2021.
 
+<div display="inline-block" align="center">
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
+![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+
+</div>
+
+
 ## Informações 📢
 
 O projeto consiste em duas aplicações, separadas em dois repositórios. O projeto em Angular foi substituído por uma nova versão construída com Vue.js.
